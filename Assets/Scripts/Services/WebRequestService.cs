@@ -1,18 +1,21 @@
 using System;
-using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class DataService
+public class WebRequestService : IService
 {
-    public static DataService Instance { get; } = new();
-
     private const string QUESTION_URL = "https://magegamessite.web.app/case1/questions.json";
     private const string LEADERBOARD_PAGE0_URL = "https://magegamessite.web.app/case1/leaderboard_page_0.json";
     private const string LEADERBOARD_PAGE1_URL = "https://magegamessite.web.app/case1/leaderboard_page_1.json";
 
     private const int REQUEST_TIMEOUT = 2;
+
+    public Scope ScopeEnum { get => Scope.APPLICATION; }
+
+    public void Destroy()
+    {
+    }
 
     public async Task RequestLeaderboard(Action<LeaderboardData> onComplete)
     {
