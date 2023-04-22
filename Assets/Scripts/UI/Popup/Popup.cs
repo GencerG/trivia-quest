@@ -9,11 +9,6 @@ public abstract class Popup : MonoBehaviour
 
     public abstract string Name { get; }
 
-    public virtual void OnPopupClosed()
-    {
-
-    }
-
     public abstract void OnPopupCreated();
 
     public virtual void Close()
@@ -39,6 +34,10 @@ public abstract class Popup : MonoBehaviour
     public virtual void PlayOutAnimation(Action onComplete)
     {
         onComplete?.Invoke();
+    }
+
+    public virtual void OnPopupClosed()
+    {
         _closeCallback?.Invoke();
     }
 
@@ -49,5 +48,10 @@ public abstract class Popup : MonoBehaviour
         var intialScale = Container.localScale.x;
         sequence.Append(Container.DOScale(intialScale + 0.02f, 0.12f));
         sequence.Append(Container.DOScale(intialScale, 0.1f));
+    }
+
+    private void OnValidate()
+    {
+        transform.name = Name;
     }
 }
