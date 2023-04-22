@@ -38,6 +38,7 @@ public class GamePlayInputManager
         if (_clickedSpriteButton == null) return;
 
         _clickedSpriteButton.ButtonUp();
+        _clickedSpriteButton = null;
     }
 
     public void Destroy()
