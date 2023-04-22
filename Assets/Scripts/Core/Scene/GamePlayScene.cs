@@ -13,11 +13,10 @@ public class GamePlayScene : IScene
 
         yield return null;
 
-        var strategyService = scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY);
-        var currentStrategy = strategyService.Create(GameMode.TIRIVIA_QUEST);
-        currentStrategy.CreateGamePlayUI();
-        currentStrategy.CreateGamePlay();
+        scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).Initialize(GameMode.TRIVIA_QUEST);
+        scopeManager.GetService<InputService>(Scope.GAMEPLAY).Initialize();
 
+        yield return scopeManager.GetService<TriviaService>(Scope.GAMEPLAY).Initialize();
 
         yield return null;
     }
