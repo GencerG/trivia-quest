@@ -5,6 +5,7 @@ using System;
 public abstract class Popup : MonoBehaviour
 {
     public RectTransform Container;
+    protected Action _closeCallback;
 
     public abstract string Name { get; }
 
@@ -30,9 +31,15 @@ public abstract class Popup : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    public void SetCloseCallback(Action closeCallback)
+    {
+        _closeCallback = closeCallback;
+    }
+
     public virtual void PlayOutAnimation(Action onComplete)
     {
         onComplete?.Invoke();
+        _closeCallback?.Invoke();
     }
 
     public virtual void PlayInAnimation()
