@@ -6,7 +6,7 @@ public class LoadingScreenDisplayer : MonoBehaviour
 {
     [SerializeField] private Image _loadingImage;
 
-    private const float SPEED = 1f;
+    private const float SPEED = 2f;
 
     public IEnumerator FadeIn()
     {
