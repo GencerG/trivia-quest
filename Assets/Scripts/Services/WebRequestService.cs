@@ -1,5 +1,6 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -17,16 +18,16 @@ public class WebRequestService : IService
     {
     }
 
-    public async Task RequestLeaderboard(Action<LeaderboardData> onComplete)
+    public IEnumerator RequestLeaderboard(Action<LeaderboardData> onComplete)
     {
         var leaderboardData = new LeaderboardData();
 
-        await SendWebRequest(LEADERBOARD_PAGE0_URL, data =>
+        yield return SendWebRequest(LEADERBOARD_PAGE0_URL, data =>
         {
             AddPage(data);
         });
 
-        await SendWebRequest(LEADERBOARD_PAGE1_URL, data =>
+        yield return SendWebRequest(LEADERBOARD_PAGE1_URL, data =>
         {
             AddPage(data);
         });
@@ -35,42 +36,51 @@ public class WebRequestService : IService
 
         void AddPage(string data)
         {
-            var pageData = JsonUtility.FromJson<LeaderboardPageData>(data);
-            leaderboardData.LeaderboardPageDatas.Add(pageData);
+            try
+            {
+                var pageData = JsonUtility.FromJson<LeaderboardPageData>(data);
+                leaderboardData.LeaderboardPageDatas.Add(pageData);
+            }
+
+            catch (Exception e)
+            {
+                Debug.LogError($"Error ocured while trying parse data with exception: {e}");
+            }
         }
     }
 
-    public async Task RequestQuestions(Action<QuestionCollectionData> onComplete)
+    public IEnumerator RequestQuestions(Action<QuestionCollectionData> onComplete)
     {
-        await SendWebRequest(QUESTION_URL, data =>
+        yield return SendWebRequest(QUESTION_URL, data =>
         {
-            var questions = JsonUtility.FromJson<QuestionCollectionData>(data);
-            onComplete?.Invoke(questions);
+            try
+            {
+                data = Regex.Replace(data, "\n", "");
+                var questions = JsonUtility.FromJson<QuestionCollectionData>(data);
+                onComplete?.Invoke(questions);
+            }
+            
+            catch (Exception e)
+            {
+                Debug.LogError($"Error ocured while trying parse data with exception: {e}");
+            };
         });
     }
 
-    private async Task SendWebRequest(string url, Action<string> onComplete = null)
+    private IEnumerator SendWebRequest(string url, Action<string> onComplete = null)
     {
-        try
+        using var webData = UnityWebRequest.Get(url);
+        webData.timeout = REQUEST_TIMEOUT;
+        webData.SendWebRequest();
+
+        while (!webData.isDone)
         {
-            using var webData = UnityWebRequest.Get(url);
-            webData.timeout = REQUEST_TIMEOUT;
-            webData.SendWebRequest();
-
-            while (!webData.isDone)
-            {
-                await Task.Yield();
-            }
-
-            if (webData.result == UnityWebRequest.Result.Success)
-            {
-                onComplete?.Invoke(webData.downloadHandler.text);
-            }
+            yield return null;
         }
 
-        catch(Exception e)
+        if (webData.result == UnityWebRequest.Result.Success)
         {
-            Debug.LogError($"Error while trying to send web request with exception: {e}");
+            onComplete?.Invoke(webData.downloadHandler.text);
         }
     }
 }
