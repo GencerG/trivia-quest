@@ -22,6 +22,13 @@ public class TriviaCountDownTimer : MonoBehaviour
         _secondsLeft = _duration;
     }
 
+    public void Clear()
+    {
+        _updateables.Clear();
+        _listeners.Clear();
+        _countDownRoutine = null;
+    }
+
     public void AddUpdateable(IUpdateablePerSecond updateable)
     {
         _updateables.Add(updateable);

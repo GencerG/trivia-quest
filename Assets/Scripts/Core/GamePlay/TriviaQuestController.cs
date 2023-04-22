@@ -101,7 +101,7 @@ public class TriviaQuestController : MonoBehaviour
         const float startDelay = 0.8f;
         const float inOutAnimationDuration = 1.1f;
         const float inAnimationDelay = 0.1f;
-        const float scoreAnimationDuration = 2.3f;
+        const float scoreAnimationDuration = 1.76f;
 
         EnableInput(false);
 
@@ -114,18 +114,38 @@ public class TriviaQuestController : MonoBehaviour
         sequence.InsertCallback(currentTime, () => 
         {
             UpdateTexts(_currentQuestion);
-            _scoreDisplay.UpdateDisplay();
+            _scoreDisplay.UpdateDisplay(null);
         });
 
         currentTime += inAnimationDelay + scoreAnimationDuration;
         sequence.InsertCallback(currentTime, PlayInAnimation);
 
         currentTime += inOutAnimationDuration;
-
         sequence.InsertCallback(currentTime, () => 
         {
             _countDownTimer.StartTimer();
             EnableInput(true);
+        });
+    }
+
+    public void EndLevel(Action onAnimationsComplete)
+    {
+        _countDownTimer.StopTimer();
+        PlayLastQuestionAnimation(onAnimationsComplete);
+    }
+
+    private void PlayLastQuestionAnimation(Action onComplete)
+    {
+        var currentTime = 0f;
+        const float inOutAnimationDuration = 1.1f;
+
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(currentTime, PlayOutAnimation);
+
+        currentTime += inOutAnimationDuration;
+        sequence.InsertCallback(currentTime, () =>
+        {
+            _scoreDisplay.UpdateDisplay(onComplete);
         });
     }
 

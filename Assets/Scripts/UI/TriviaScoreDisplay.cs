@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class TriviaScoreDisplay : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class TriviaScoreDisplay : MonoBehaviour
 
     private TriviaScoreAnimation _animation;
     private ScoreService _scoreService;
+    private Action _onScoreAnimationsComplete;
     private int _displayedScore;
     private int _winAmount;
 
@@ -19,8 +21,9 @@ public class TriviaScoreDisplay : MonoBehaviour
         _scoreText.text = "0";
     }
 
-    public void UpdateDisplay()
+    public void UpdateDisplay(Action onComplete)
     {
+        _onScoreAnimationsComplete = onComplete;
         _winAmount = _scoreService.GetWinAmount();
         _animation = Instantiate(_scorePrefab, _parent);
         _animation.Initialize(_winAmount);
@@ -37,5 +40,6 @@ public class TriviaScoreDisplay : MonoBehaviour
         {
             _scoreText.text = _displayedScore.ToString();
         }));
+        sequence.OnComplete(() => _onScoreAnimationsComplete?.Invoke());
     }
 }

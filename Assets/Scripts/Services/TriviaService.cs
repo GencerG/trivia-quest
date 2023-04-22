@@ -30,7 +30,7 @@ public class TriviaService :  IService
         _shouldRandom = scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).ShouldSelectQuestionRandomly();
 
         var questionContainerPrefab = scopeManager.GetService<ResourceService>(Scope.APPLICATION).GetPrefab<TriviaQuestController>("QuestionContainer");
-        _questionContainer = UnityEngine.Object.Instantiate(questionContainerPrefab);
+        _questionContainer = Object.Instantiate(questionContainerPrefab);
 
         _questionContainer.Initialize(GetQuestionData());
     }
@@ -38,6 +38,21 @@ public class TriviaService :  IService
     public QuestionData RequestNextQuestion()
     {
         return GetQuestionData();
+    }
+
+    public void EndLevel()
+    {
+        var scopeManager = ScopeManager.Instance;
+        scopeManager.GetService<InputService>(Scope.GAMEPLAY).InputListener.Enable(false);
+        _questionContainer.EndLevel(() =>
+        {
+            var popupService = scopeManager.GetService<PopupService>(Scope.APPLICATION);
+            var levelEndPopup = popupService.ShowPopup<LevelEndPopup>();
+            levelEndPopup.SetCloseCallback(() =>
+            {
+                scopeManager.GetService<SceneService>(Scope.APPLICATION).ChangeScene(Scene.MAIN_MENU);
+            });
+        });
     }
 
     private QuestionData GetQuestionData()
@@ -49,12 +64,24 @@ public class TriviaService :  IService
 
         if (_shouldRandom)
         {
-            var question = _questionDataList[UnityEngine.Random.Range(0, _questionDataList.Count)];
+            if (_questionDataList.Count == 0)
+            {
+                EndLevel();
+                return null;
+            }
+
+            var question = _questionDataList[Random.Range(0, _questionDataList.Count)];
             _questionDataList.Remove(question);
             return question;
         }
         else
         {
+            if (_currentQuestionIndex >= _questionDataList.Count - 1)
+            {
+                EndLevel();
+                return null;
+            }
+
             return _questionDataList[Mathf.Min(_currentQuestionIndex++, _questionDataList.Count - 1)];
         }
     }
