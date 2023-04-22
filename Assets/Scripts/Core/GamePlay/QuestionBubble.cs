@@ -1,14 +1,22 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class QuestionBubble : QuestionComponent
 {
+    private Vector3 _intialScale;
+
+    private void Awake()
+    {
+        _intialScale = transform.localScale;
+    }
+
     public override void PlayOutAnimation()
     {
-        base.PlayOutAnimation();
+        transform.DOScale(0f, 0.3f).SetEase(Ease.InBack);
     }
 
     public override void PlayInAnimation()
     {
-        base.PlayInAnimation();
+        transform.DOScale(_intialScale, 0.3f).SetEase(Ease.OutBack);
     }
 }

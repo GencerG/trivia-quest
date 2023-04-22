@@ -55,7 +55,7 @@ public class QuestionContainer : MonoBehaviour
 
         var currentTime = 0f;
         const float startDelay = 0.5f;
-        const float inOutAnimationDuration = 0.8f;
+        const float inOutAnimationDuration = 1f;
         const float inAnimationDelay = 0.1f;
 
         var inputService = ScopeManager.Instance.GetService<InputService>(Scope.GAMEPLAY);
@@ -108,9 +108,10 @@ public class QuestionContainer : MonoBehaviour
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(_choices.Count * animationInterval + moveAnimationDuration, () => _questionBubble.PlayOutAnimation());
 
-        for (var i = _choices.Count -1 ; i >= 0; i--)
+        for (var i = _choices.Count - 1 ; i >= 0; i--)
         {
-            sequence.InsertCallback((_choices.Count - i) * animationInterval, () => _choices[i].PlayOutAnimation());
+            var choice = _choices[i];
+            sequence.InsertCallback((_choices.Count - i) * animationInterval, () => choice.PlayOutAnimation());
         }
     }
 
@@ -123,7 +124,8 @@ public class QuestionContainer : MonoBehaviour
 
         for (var i = 0; i < _choices.Count; i++)
         {
-            sequence.InsertCallback(i * animationInterval, () => _choices[i].PlayInAnimation());
+            var choice = _choices[i];
+            sequence.InsertCallback(i * animationInterval, () => choice.PlayInAnimation());
         }
     }
 }

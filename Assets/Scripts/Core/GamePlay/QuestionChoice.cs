@@ -11,13 +11,14 @@ public class QuestionChoice : QuestionComponent
 
     public override void PlayInAnimation()
     {
+        _backgroundSpriteRenderer.color = Color.white;
         transform.localPosition = new Vector3(-5f, transform.localPosition.y, transform.localPosition.z);
-        transform.DOLocalMoveX(0f, MOVE_ANIMATION_DURATION).SetEase(Ease.InQuint);
+        transform.DOLocalMoveX(0f, MOVE_ANIMATION_DURATION).SetEase(Ease.OutBack);
     }
 
     public override void PlayOutAnimation()
     {
-        transform.DOLocalMoveX(5f, MOVE_ANIMATION_DURATION).SetEase(Ease.InQuint);
+        transform.DOLocalMoveX(5f, MOVE_ANIMATION_DURATION).SetEase(Ease.InBack);
     }
 
     public void PlayCorrectAnswerAnimation()
