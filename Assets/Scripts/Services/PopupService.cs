@@ -37,20 +37,27 @@ public class PopupService : IService
 
         popup.OnPopupCreated();
         popup.PlayInAnimation();
+        _popupLibrary.ShowPopupBackground();
 
         return popup as T;
     }
 
     public void ClosePopup(Popup popup)
     {
-        if (popup == null || popup.Equals(_currentPopup))
+        if (popup == null || !popup.Equals(_currentPopup))
         {
             Debug.Log("Can not close popup, not the latest popup");
             return;
         }
 
+        _popupLibrary.HidePopupBackground();
         popup.PlayOutAnimation(() =>
         {
+            if (_popupStack.Count > 0)
+            {
+                // removing current popup
+                _popupStack.Pop();
+            }
             popup.OnPopupClosed();
             Object.Destroy(popup.gameObject);
 
