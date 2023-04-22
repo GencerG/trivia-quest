@@ -8,6 +8,7 @@ public class QuestionBubble : QuestionComponent
     private void Awake()
     {
         _intialScale = transform.localScale;
+        transform.localScale = Vector3.zero;
     }
 
     public override void PlayOutAnimation()

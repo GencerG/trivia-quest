@@ -8,17 +8,30 @@ public class QuestionChoice : QuestionComponent
     [SerializeField] private SpriteRenderer _backgroundSpriteRenderer;
 
     private const float MOVE_ANIMATION_DURATION = 0.4f;
+    private const float CHOICE_WIDTH = 1.5f;
+
+    private float _outPosition;
+    private float _inPosition;
+
+    private void Awake()
+    {
+        const int pixelsPerUnit = 100;
+        var screenWidth = Screen.width / pixelsPerUnit;
+        _outPosition = screenWidth * 0.5f + CHOICE_WIDTH;
+        _inPosition = _outPosition * -1f;
+        transform.localPosition = new Vector3(_inPosition, transform.localPosition.y, transform.localPosition.z);
+    }
 
     public override void PlayInAnimation()
     {
         _backgroundSpriteRenderer.color = Color.white;
-        transform.localPosition = new Vector3(-5f, transform.localPosition.y, transform.localPosition.z);
+        transform.localPosition = new Vector3(_inPosition, transform.localPosition.y, transform.localPosition.z);
         transform.DOLocalMoveX(0f, MOVE_ANIMATION_DURATION).SetEase(Ease.OutBack);
     }
 
     public override void PlayOutAnimation()
     {
-        transform.DOLocalMoveX(5f, MOVE_ANIMATION_DURATION).SetEase(Ease.InBack);
+        transform.DOLocalMoveX(_outPosition, MOVE_ANIMATION_DURATION).SetEase(Ease.InBack);
     }
 
     public void PlayCorrectAnswerAnimation()
