@@ -7,7 +7,7 @@ public class TriviaService :  IService
     public Scope ScopeEnum => Scope.GAMEPLAY;
 
     private List<QuestionData> _questionDataList;
-    private QuestionContainer _questionContainer;
+    private TriviaQuestController _questionContainer;
 
     private int _currentQuestionIndex;
     private bool _shouldRandom;
@@ -29,7 +29,7 @@ public class TriviaService :  IService
         
         _shouldRandom = scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).ShouldSelectQuestionRandomly();
 
-        var questionContainerPrefab = scopeManager.GetService<ResourceService>(Scope.APPLICATION).GetPrefab<QuestionContainer>("QuestionContainer");
+        var questionContainerPrefab = scopeManager.GetService<ResourceService>(Scope.APPLICATION).GetPrefab<TriviaQuestController>("QuestionContainer");
         _questionContainer = UnityEngine.Object.Instantiate(questionContainerPrefab);
 
         _questionContainer.Initialize(GetQuestionData());

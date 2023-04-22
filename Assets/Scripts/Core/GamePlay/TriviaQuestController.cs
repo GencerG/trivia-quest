@@ -1,12 +1,15 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestionContainer : MonoBehaviour
+public class TriviaQuestController : MonoBehaviour
 {
     [SerializeField] private List<QuestionChoice> _choices;
     [SerializeField] private QuestionBubble _questionBubble;
+    [SerializeField] private TriviaTimerDisplay _timerDisplay;
+    [SerializeField] private TriviaCountDownTimer _countDownTimer;
 
     private QuestionData _currentQuestion;
     private ScopeManager _scopManager;
@@ -15,32 +18,67 @@ public class QuestionContainer : MonoBehaviour
     {
         _scopManager = ScopeManager.Instance;
         _currentQuestion = questionData;
+
+        _countDownTimer.Initialize(this);
+        _countDownTimer.AddUpdateable(_timerDisplay);
+        _countDownTimer.AddListener(_timerDisplay);
+        _countDownTimer.StartTimer();
+
         UpdateTexts(questionData);
+        PlayInAnimation();
     }
 
     public void OnChoiceClicked(QuestionChoice clickedChoice)
     {
-        if (Enum.TryParse<QuestionChoiceType>(_currentQuestion.answer, out var result))
+        if (!Enum.TryParse<QuestionChoiceType>(_currentQuestion.answer, out var result))
         {
-            var isCorrect = false;
+            return;
+        }
 
-            if (result.Equals(clickedChoice.ChoiceType))
-            {
-                isCorrect = true;
-                clickedChoice.PlayCorrectAnswerAnimation();
-            }
-            else
-            {
-                isCorrect = false;
-                clickedChoice.PlayWrongAnswerAnimation();
-                var correctChoice = FindCorrectChoice(result);
-                if (correctChoice != null)
-                {
-                    correctChoice.PlayCorrectAnswerAnimation();
-                }
-            }
+        var isCorrect = false;
 
-            StartNextQuestion();
+        if (result.Equals(clickedChoice.ChoiceType))
+        {
+            isCorrect = true;
+            clickedChoice.PlayCorrectAnswerAnimation();
+        }
+        else
+        {
+            isCorrect = false;
+            clickedChoice.PlayWrongAnswerAnimation();
+            HighlightCorrectAnswer(result);
+        }
+
+        StartNextQuestion();
+    }
+
+    public IEnumerator OnTimeOut()
+    {
+        if (!Enum.TryParse<QuestionChoiceType>(_currentQuestion.answer, out var result))
+        {
+            yield break;
+        }
+
+        EnableInput(false);
+        HighlightCorrectAnswer(result);
+
+        yield return new WaitForSeconds(1f);
+
+        StartNextQuestion();
+    }
+
+    public void EnableInput(bool enable)
+    {
+        var inputService = _scopManager.GetService<InputService>(Scope.GAMEPLAY);
+        inputService.InputListener.Enable(enable);
+    }
+
+    private void HighlightCorrectAnswer(QuestionChoiceType result)
+    {
+        var correctChoice = FindCorrectChoice(result);
+        if (correctChoice != null)
+        {
+            correctChoice.PlayCorrectAnswerAnimation();
         }
     }
 
@@ -53,13 +91,14 @@ public class QuestionContainer : MonoBehaviour
             return;
         }
 
+        _countDownTimer.StopTimer();
+
         var currentTime = 0f;
         const float startDelay = 0.5f;
         const float inOutAnimationDuration = 1f;
         const float inAnimationDelay = 0.1f;
 
-        var inputService = ScopeManager.Instance.GetService<InputService>(Scope.GAMEPLAY);
-        inputService.InputListener.Enable(false);
+        EnableInput(false);
 
         var sequence = DOTween.Sequence();
 
@@ -74,7 +113,11 @@ public class QuestionContainer : MonoBehaviour
 
         currentTime += inOutAnimationDuration;
 
-        sequence.InsertCallback(currentTime, () => inputService.InputListener.Enable(true));
+        sequence.InsertCallback(currentTime, () => 
+        {
+            _countDownTimer.StartTimer();
+            EnableInput(true);
+        });
     }
 
     private QuestionChoice FindCorrectChoice(QuestionChoiceType correctAnswer)
