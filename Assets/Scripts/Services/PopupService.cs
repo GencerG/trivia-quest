@@ -1,12 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PopupService
+public class PopupService : IService
 {
-    public static PopupService Instance { get; } = new();
-
     private Popup _currentPopup;
     private readonly Stack<Popup> _popupStack = new();
+    private PopupLibrary _popupLibrary;
+
+    public Scope ScopeEnum => Scope.APPLICATION;
+
+    public PopupService()
+    {
+        var popupLibraryPrefab = ScopeManager.Instance.GetService<ResourceService>(Scope.APPLICATION).GetPrefab<PopupLibrary>("PopupLibrary");
+        _popupLibrary = Object.Instantiate(popupLibraryPrefab);
+        _popupLibrary.Initialize();
+        Object.DontDestroyOnLoad(_popupLibrary.gameObject);
+    }
 
     public T ShowPopup<T>() where T : Popup
     {
@@ -15,23 +24,35 @@ public class PopupService
             _currentPopup.Hide();
         }
 
-        var temp = new GameObject();
-        var temp2 = temp.GetComponent<Popup>();
-        _currentPopup = temp2;
-        _popupStack.Push(temp2);
+        var popupPrefab = _popupLibrary.GetPopupFromLibrary<T>();
+        if (popupPrefab == null)
+        {
+            Debug.Log("Can not display popup, could not find in library");
+            return null;
+        }
 
-        temp2.OnPopupCreated();
-        temp2.PlayInAnimation();
+        var popup = Object.Instantiate(popupPrefab);
+        _currentPopup = popup;
+        _popupStack.Push(popup);
 
-        return temp2 as T;
+        popup.OnPopupCreated();
+        popup.PlayInAnimation();
+
+        return popup as T;
     }
 
-    public void CloseCurrentPopup()
+    public void ClosePopup(Popup popup)
     {
-        _currentPopup.PlayOutAnimation(() =>
+        if (popup == null || popup.Equals(_currentPopup))
         {
-            _currentPopup.OnPopupClosed();
-            Object.Destroy(_currentPopup.gameObject);
+            Debug.Log("Can not close popup, not the latest popup");
+            return;
+        }
+
+        popup.PlayOutAnimation(() =>
+        {
+            popup.OnPopupClosed();
+            Object.Destroy(popup.gameObject);
 
             Popup previousPopup = null;
 
@@ -57,5 +78,9 @@ public class PopupService
         }
 
         _popupStack.Clear();
+    }
+
+    public void Destroy()
+    {
     }
 }
