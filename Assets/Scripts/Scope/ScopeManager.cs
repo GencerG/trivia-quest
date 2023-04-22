@@ -18,6 +18,8 @@ public class ScopeManager
 
     public void DestroyScope(Scope scope)
     {
+        Debug.Log($"Destroying Scope: {scope}");
+
         ref var serviceScope = ref GetScopeByEnum(scope);
         DestroyScopeInternal(ref serviceScope);
     }
@@ -71,7 +73,6 @@ public class ScopeManager
 
     private void DestroyScopeInternal(ref ServiceScope scope)
     {
-        Debug.Log($"Destroying Scope: {scope.GetType().Name}");
         scope.DestroyScope();
         scope = null;
     }
