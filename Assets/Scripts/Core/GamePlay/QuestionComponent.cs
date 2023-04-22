@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public abstract class QuestionComponent : MonoBehaviour
+public class QuestionComponent : MonoBehaviour
 {
     [SerializeField] private TextMeshPro _componentText;
 
