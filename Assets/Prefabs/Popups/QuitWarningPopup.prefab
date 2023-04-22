@@ -88,9 +88,9 @@ GameObject:
   - component: {fileID: 3835471329567817752}
   - component: {fileID: 3835471329567817753}
   - component: {fileID: 3835471329567817754}
-  - component: {fileID: -7547853133076864508}
+  - component: {fileID: 1704860272568920718}
   m_Layer: 5
-  m_Name: LeaderboardPopup
+  m_Name: QuitWarningPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &-7547853133076864508
+--- !u!114 &1704860272568920718
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3835471329567817755}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92f1ffd8e461cf34db0f78361000e178, type: 3}
+  m_Script: {fileID: 11500000, guid: e76775424c311894a8f77d66acdb9ed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Container: {fileID: 3887848357430288660}

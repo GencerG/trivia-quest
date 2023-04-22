@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 820465608639309779}
   _questionBubble: {fileID: 3002620382826426378}
   _timerDisplay: {fileID: 812340028812617629}
+  _scoreDisplay: {fileID: 138745543347191210}
   _countDownTimer: {fileID: 5063268286109419418}
 --- !u!1 &789352789371947077
 GameObject:
@@ -496,6 +497,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aec7125b06f97974cbb707e704b831d2, type: 3}
+--- !u!114 &138745543347191210 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5589661449296930422, guid: aec7125b06f97974cbb707e704b831d2, type: 3}
+  m_PrefabInstance: {fileID: 5512013620741495772}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07f0c242bb536a944bf4a291958b9295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &812340028812617629 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5132020949375106113, guid: aec7125b06f97974cbb707e704b831d2, type: 3}
