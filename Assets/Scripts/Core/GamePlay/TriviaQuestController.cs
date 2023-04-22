@@ -9,6 +9,7 @@ public class TriviaQuestController : MonoBehaviour
     [SerializeField] private List<QuestionChoice> _choices;
     [SerializeField] private QuestionBubble _questionBubble;
     [SerializeField] private TriviaTimerDisplay _timerDisplay;
+    [SerializeField] private TriviaScoreDisplay _scoreDisplay;
     [SerializeField] private TriviaCountDownTimer _countDownTimer;
 
     private QuestionData _currentQuestion;
@@ -23,6 +24,7 @@ public class TriviaQuestController : MonoBehaviour
         _countDownTimer.AddUpdateable(_timerDisplay);
         _countDownTimer.AddListener(_timerDisplay);
         _countDownTimer.StartTimer();
+        _scoreDisplay.Initialize();
 
         UpdateTexts(questionData);
         PlayInAnimation();
@@ -35,20 +37,21 @@ public class TriviaQuestController : MonoBehaviour
             return;
         }
 
-        var isCorrect = false;
+        QuestionAnswer state;
 
         if (result.Equals(clickedChoice.ChoiceType))
         {
-            isCorrect = true;
+            state = QuestionAnswer.CORRECT;
             clickedChoice.PlayCorrectAnswerAnimation();
         }
         else
         {
-            isCorrect = false;
+            state = QuestionAnswer.WRONG;
             clickedChoice.PlayWrongAnswerAnimation();
             HighlightCorrectAnswer(result);
         }
 
+        _scopManager.GetService<ScoreService>(Scope.GAMEPLAY).UpdateScore(state);
         StartNextQuestion();
     }
 
@@ -59,6 +62,7 @@ public class TriviaQuestController : MonoBehaviour
             yield break;
         }
 
+        _scopManager.GetService<ScoreService>(Scope.GAMEPLAY).UpdateScore(QuestionAnswer.TIME_OUT);
         EnableInput(false);
         HighlightCorrectAnswer(result);
 
@@ -94,9 +98,10 @@ public class TriviaQuestController : MonoBehaviour
         _countDownTimer.StopTimer();
 
         var currentTime = 0f;
-        const float startDelay = 0.5f;
-        const float inOutAnimationDuration = 1f;
+        const float startDelay = 0.8f;
+        const float inOutAnimationDuration = 1.1f;
         const float inAnimationDelay = 0.1f;
+        const float scoreAnimationDuration = 2.3f;
 
         EnableInput(false);
 
@@ -106,9 +111,13 @@ public class TriviaQuestController : MonoBehaviour
         sequence.InsertCallback(currentTime, PlayOutAnimation);
 
         currentTime += inOutAnimationDuration;
-        sequence.InsertCallback(currentTime, () => UpdateTexts(_currentQuestion));
+        sequence.InsertCallback(currentTime, () => 
+        {
+            UpdateTexts(_currentQuestion);
+            _scoreDisplay.UpdateDisplay();
+        });
 
-        currentTime += inAnimationDelay;
+        currentTime += inAnimationDelay + scoreAnimationDuration;
         sequence.InsertCallback(currentTime, PlayInAnimation);
 
         currentTime += inOutAnimationDuration;
@@ -171,4 +180,12 @@ public class TriviaQuestController : MonoBehaviour
             sequence.InsertCallback(i * animationInterval, () => choice.PlayInAnimation());
         }
     }
+}
+
+public enum QuestionAnswer
+{
+    NONE,
+    CORRECT,
+    WRONG,
+    TIME_OUT
 }
