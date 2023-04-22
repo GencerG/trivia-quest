@@ -9,12 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2702535814774705260}
-  - component: {fileID: 2702535814774705261}
-  - component: {fileID: 5816816416766479175}
-  - component: {fileID: 3272048874434769214}
+  - component: {fileID: 558375347511426927}
   m_Layer: 0
-  m_Name: QuestionChoice
-  m_TagString: SpriteButton
+  m_Name: QuestionBubble
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2702535814774705261
+--- !u!114 &558375347511426927
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,64 +43,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2702535814774705262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 838ff2a7c41b65649b04588e164e36a4, type: 3}
+  m_Script: {fileID: 11500000, guid: aa88b667a18b4a4469f744b375b14080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _componentText: {fileID: 2702535815138728120}
-  _backgroundSpriteRenderer: {fileID: 2702535814791678137}
---- !u!114 &5816816416766479175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2702535814774705262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b16a6eee37490534fbd3ab4b2b724da2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2702535814774705261}
-        m_TargetAssemblyTypeName: QuestionChoice, Assembly-CSharp
-        m_MethodName: OnComponentClicked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!61 &3272048874434769214
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2702535814774705262}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.030821085, y: -0.0019263029}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.8552852, y: 0.51071525}
-  m_EdgeRadius: 0
 --- !u!1 &2702535814791678139
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +143,7 @@ GameObject:
   - component: {fileID: 2702535815138728071}
   - component: {fileID: 2702535815138728120}
   m_Layer: 0
-  m_Name: ChoiceText
+  m_Name: QuestionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

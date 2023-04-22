@@ -1,12 +1,22 @@
 using TMPro;
 using UnityEngine;
 
-public class QuestionComponent : MonoBehaviour
+public abstract class QuestionComponent : MonoBehaviour
 {
-    [SerializeField] private TextMeshPro _choiceText;
+    [SerializeField] private TextMeshPro _componentText;
 
-    public void UpdateText(string choiceText)
+    public void UpdateText(string componentText)
     {
-        _choiceText.text = choiceText;
+        _componentText.text = componentText;
+    }
+
+    public virtual void PlayInAnimation()
+    {
+
+    }
+
+    public virtual void PlayOutAnimation()
+    {
+
     }
 }
