@@ -43,7 +43,7 @@ public class GamePlayInputManager
 
     public void Destroy()
     {
-        _inputListener.TouchStarted += TouchStarted;
-        _inputListener.TouchEnded += TouchEnded;
+        _inputListener.TouchStarted -= TouchStarted;
+        _inputListener.TouchEnded -= TouchEnded;
     }
 }
