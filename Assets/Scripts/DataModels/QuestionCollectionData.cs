@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [Serializable]
 public class QuestionCollectionData
 {
-    public readonly List<QuestionData> questions;
+    public List<QuestionData> questions;
 }
 
 [Serializable]
