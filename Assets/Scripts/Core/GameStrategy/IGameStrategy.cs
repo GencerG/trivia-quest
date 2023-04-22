@@ -13,6 +13,4 @@ public interface IGameStrategy
     bool ShouldSelectQuestionRandomly();
 
     int GetQuestionLimit();
-
-    int GetChoiceLimit();
 }

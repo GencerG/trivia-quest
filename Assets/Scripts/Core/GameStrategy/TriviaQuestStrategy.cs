@@ -33,10 +33,5 @@ public class TriviaQuestStrategy : IGameStrategy
     public bool ShouldSelectQuestionRandomly()
     {
         return false;
-    }
-
-    public int GetChoiceLimit()
-    {
-        return 4;
-    }
+    }  
 }
