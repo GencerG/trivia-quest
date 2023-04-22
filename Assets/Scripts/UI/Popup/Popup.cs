@@ -4,20 +4,20 @@ using System;
 
 public abstract class Popup : MonoBehaviour
 {
+    public RectTransform Container;
+
+    public abstract string Name { get; }
 
     public virtual void OnPopupClosed()
     {
 
     }
 
-    public virtual void OnPopupCreated()
-    {
-
-    }
+    public abstract void OnPopupCreated();
 
     public virtual void Close()
     {
-
+        ScopeManager.Instance.GetService<PopupService>(Scope.APPLICATION).ClosePopup(this);
     }
 
     public virtual void Hide()
@@ -37,7 +37,10 @@ public abstract class Popup : MonoBehaviour
 
     public virtual void PlayInAnimation()
     {
-        transform.localScale = Vector3.zero;
-        transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+        var sequence = DOTween.Sequence();
+
+        var intialScale = Container.localScale.x;
+        sequence.Append(Container.DOScale(intialScale + 0.02f, 0.12f));
+        sequence.Append(Container.DOScale(intialScale, 0.1f));
     }
 }
