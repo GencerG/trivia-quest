@@ -6,6 +6,7 @@ public class SceneService : MonoBehaviour, IService
 {
     public Scope ScopeEnum => Scope.APPLICATION;
 
+    private Coroutine _currentSceneChangeRoutine;
     private IScene _activeScene;
     private LoadingScreenDisplayer _loadingScreenDisplayer;
 
@@ -18,7 +19,15 @@ public class SceneService : MonoBehaviour, IService
 
     public void ChangeScene(Scene scene)
     {
-        StartCoroutine(SceneChangeRoutine(scene));
+        if (_currentSceneChangeRoutine != null)
+        {
+            Debug.LogWarning("Trying to change scene while there is active transition, killing current transition");
+
+            StopCoroutine(_currentSceneChangeRoutine);
+            _currentSceneChangeRoutine = null;
+        }
+
+        _currentSceneChangeRoutine = StartCoroutine(SceneChangeRoutine(scene));
     }
 
     private IEnumerator SceneChangeRoutine(Scene scene)
@@ -43,6 +52,7 @@ public class SceneService : MonoBehaviour, IService
         yield return null;
 
         yield return _loadingScreenDisplayer.FadeOut();
+        _currentSceneChangeRoutine = null;
     }
 
     private IScene CreateActiveScene(Scene scene)
