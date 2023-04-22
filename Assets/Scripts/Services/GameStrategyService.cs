@@ -1,27 +1,63 @@
-public class GameStrategyService
+public class GameStrategyService : IService
 {
-    public static GameStrategyService Instance { get; } = new();
+    public Scope ScopeEnum => Scope.GAMEPLAY;
 
     private IGameStrategy _currentStrategy;
 
-    public void Create(GameMode gameMode)
+    public void Initialize(GameMode gameMode)
     {
         switch (gameMode)
         {
-            case GameMode.TIRIVIA_QUEST:
+            default:
+            case GameMode.TRIVIA_QUEST:
                 _currentStrategy = new TriviaQuestStrategy();
                 break;
         }
-
     }
 
-    public IGameStrategy GetCurrentStrategy()
+    public int GetCorrectAnswerScore()
     {
-        return _currentStrategy;
+        return _currentStrategy.GetCorrectAnswerScore();
+    }
+
+    public int GetWrongAnswerScore()
+    {
+        return _currentStrategy.GetWrongAnswerScore();
+    }
+
+    public bool ShouldUseTimer()
+    {
+        return _currentStrategy.ShouldUseTimer();
+    }
+
+    public int GetStageDuration()
+    {
+        return _currentStrategy.GetStageDuration();
+    }
+
+    public int GetTimeoutScore()
+    {
+        return _currentStrategy.GetTimeoutScore();
+    }
+
+    public bool ShouldSelectQuestionRandomly()
+    {
+        return _currentStrategy.ShouldSelectQuestionRandomly();
+    }
+
+    public int GetQuestionLimit()
+    {
+        return _currentStrategy.GetQuestionLimit();
+    }
+
+
+    public void Destroy()
+    {
+        
     }
 }
 
 public enum GameMode
 {
-    TIRIVIA_QUEST,
+    TRIVIA_QUEST,
 }
