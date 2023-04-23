@@ -20,7 +20,6 @@ public class TriviaQuestController : MonoBehaviour
     private PopupService _popupService;
     private InputService _inputService;
 
-    private bool _sequencePaused;
     private bool _levelEnd;
 
     public void Initialize(QuestionData questionData)
@@ -28,7 +27,7 @@ public class TriviaQuestController : MonoBehaviour
         var scopeManager = ScopeManager.Instance;
 
         _scoreService = scopeManager.GetService<ScoreService>(Scope.GAMEPLAY);
-        _popupService = scopeManager.GetService<PopupService>(Scope.GAMEPLAY);
+        _popupService = scopeManager.GetService<PopupService>(Scope.APPLICATION);
         _triviaService = scopeManager.GetService<TriviaService>(Scope.GAMEPLAY);
         _inputService = scopeManager.GetService<InputService>(Scope.GAMEPLAY);
 
@@ -157,38 +156,27 @@ public class TriviaQuestController : MonoBehaviour
             return;
         }
 
-        _countDownTimer.PauseTimer();
-        EnableInput(false);
-
         if (_currentQuestionSequence != null && _currentQuestionSequence.IsPlaying())
         {
-            _sequencePaused = true;
-            _currentQuestionSequence.Pause();
+            return;
         }
+
+        _countDownTimer.PauseTimer();
+        EnableInput(false);
 
         var warningPopup = _popupService.ShowPopup<QuitWarningPopup>();
         warningPopup.SetCloseCallback(() => 
         {
+            EnableInput(true);
             _countDownTimer.UnPauseTimer();
-            if (_sequencePaused)
-            {
-                _currentQuestionSequence.Play();
-                _sequencePaused = false;
-            }
-            else
-            {
-                EnableInput(true);
-            }
         });
     }
 
     private void PlayLastQuestionAnimation(Action onComplete)
     {
-        if (_currentQuestionSequence != null && _sequencePaused)
+        if (_currentQuestion != null)
         {
-            _currentQuestionSequence.Play();
-            _sequencePaused = false;
-            _currentQuestionSequence.OnComplete(() => onComplete?.Invoke());
+            onComplete?.Invoke();
             return;
         }
 
@@ -245,11 +233,6 @@ public class TriviaQuestController : MonoBehaviour
 
     private void PlayInAnimation()
     {
-        if (_levelEnd)
-        {
-            return;
-        }
-
         const float animationInterval = 0.1f;
 
         var sequence = DOTween.Sequence();
