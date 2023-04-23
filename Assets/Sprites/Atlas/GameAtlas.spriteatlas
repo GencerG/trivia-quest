@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GameAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 4
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 807116e74ece69f469b690ea80e6c411, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 0bbbdc60348a3884cb9ca3a4283a13d6, type: 3}
+  - {fileID: 21300000, guid: bfad5f3573c88be40a0b7b0e7b1bd79d, type: 3}
+  - {fileID: 21300000, guid: 4b940e87b473a934e9f4409b8f50cc6d, type: 3}
+  - {fileID: 21300000, guid: ad1020499dbac99408e5a9130406259e, type: 3}
+  - {fileID: 21300000, guid: c505318a298c81749a574ceea3c3888a, type: 3}
+  - {fileID: 21300000, guid: cd75b86c2f8c4724fbd733cd6d6ba7cc, type: 3}
+  - {fileID: 21300000, guid: c19f019e82f609a43a421423be7e1f1c, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - QuestionChoiceBackground
+  - CloseButton
+  - QuestionBackground
+  - ContinueButton
+  - PopupBackground
+  - MainMenuButton
+  - TimerBackground
+  m_RenderDataMap: {}
+  m_Tag: GameAtlas
+  m_IsVariant: 0
