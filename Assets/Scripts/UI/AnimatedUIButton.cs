@@ -2,7 +2,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
 
-[RequireComponent(typeof(Image))]
+
 public class AnimatedUIButton : Button
 {
     public override void OnPointerClick(PointerEventData eventData)
