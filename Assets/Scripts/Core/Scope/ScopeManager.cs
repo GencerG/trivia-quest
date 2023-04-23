@@ -30,7 +30,13 @@ public class ScopeManager
 
         ref var serviceScope = ref GetScopeByEnum(scope);
         var targetService = serviceScope.GetService<T>();
-        if (targetService == null)
+
+        if (targetService != null)
+        {
+            return targetService.ScopeEnum.Equals(scope) ? targetService : null; 
+        }
+
+        else
         {
             targetService = (T)Activator.CreateInstance(typeof(T));
 
@@ -39,9 +45,12 @@ public class ScopeManager
                 RegisterService(targetService);
                 return targetService;
             }
-        }
 
-        return targetService;
+            else
+            {
+                return null;
+            }
+        }
     }
 
     public void RegisterService<T>(T type) where T : IService
