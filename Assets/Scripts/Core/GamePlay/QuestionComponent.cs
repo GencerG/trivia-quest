@@ -1,22 +1,25 @@
 using TMPro;
 using UnityEngine;
 
-public class QuestionComponent : MonoBehaviour
+namespace TriviaQuest.Core.Gameplay
 {
-    [SerializeField] private TextMeshPro _componentText;
-
-    public void UpdateText(string componentText)
+    public class QuestionComponent : MonoBehaviour
     {
-        _componentText.text = componentText;
-    }
+        [SerializeField] private TextMeshPro _componentText;
 
-    public virtual void PlayInAnimation()
-    {
+        public void UpdateText(string componentText)
+        {
+            _componentText.text = componentText;
+        }
 
-    }
+        public virtual void PlayInAnimation()
+        {
 
-    public virtual void PlayOutAnimation()
-    {
+        }
 
+        public virtual void PlayOutAnimation()
+        {
+
+        }
     }
 }

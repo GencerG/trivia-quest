@@ -1,4 +1,7 @@
-public interface IUpdateablePerSecond
+namespace TriviaQuest.Core.Gameplay
 {
-    void OnUpdate(int secondsLeft);
+    public interface IUpdateablePerSecond
+    {
+        void OnUpdate(int secondsLeft);
+    }
 }

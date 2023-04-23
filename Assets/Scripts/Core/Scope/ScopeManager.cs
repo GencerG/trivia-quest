@@ -1,101 +1,99 @@
 using System;
+using TriviaQuest.Core.Services;
 using UnityEngine;
 
-public class ScopeManager
+namespace TriviaQuest.Core.ServiceScope
 {
-    public static ScopeManager Instance { get; } = new();
-
-    private ServiceScope _applicationScope;
-    private ServiceScope _gamePlayScope;
-    private ServiceScope _nullScope;
-
-    public ServiceScope CreateScope(Scope scope)
+    public class ScopeManager
     {
-         ref var serviceScope = ref GetScopeByEnum(scope);
-        serviceScope = new ServiceScope(scope.ToString());
-        return serviceScope;
-    }
+        public static ScopeManager Instance { get; } = new();
 
-    public void DestroyScope(Scope scope)
-    {
-        Debug.Log($"Destroying Scope: {scope}");
+        private ServiceScope _applicationScope;
+        private ServiceScope _gamePlayScope;
+        private ServiceScope _nullScope;
 
-        ref var serviceScope = ref GetScopeByEnum(scope);
-        DestroyScopeInternal(ref serviceScope);
-    }
-
-    public T GetService<T>(Scope scope) where T : class, IService
-    {
-        if (!IsScopeActive(scope)) return null;
-
-        ref var serviceScope = ref GetScopeByEnum(scope);
-        var targetService = serviceScope.GetService<T>();
-
-        if (targetService != null)
+        public ServiceScope CreateScope(Scope scope)
         {
-            return targetService.ScopeEnum.Equals(scope) ? targetService : null; 
+            ref var serviceScope = ref GetScopeByEnum(scope);
+            serviceScope = new ServiceScope(scope.ToString());
+            return serviceScope;
         }
 
-        else
+        public void DestroyScope(Scope scope)
         {
-            targetService = (T)Activator.CreateInstance(typeof(T));
+            Debug.Log($"Destroying Scope: {scope}");
 
-            if (targetService.ScopeEnum.Equals(scope))
+            ref var serviceScope = ref GetScopeByEnum(scope);
+            DestroyScopeInternal(ref serviceScope);
+        }
+
+        public T GetService<T>(Scope scope) where T : class, IService
+        {
+            if (!IsScopeActive(scope)) return null;
+
+            ref var serviceScope = ref GetScopeByEnum(scope);
+            var targetService = serviceScope.GetService<T>();
+
+            if (targetService != null)
             {
-                RegisterService(targetService);
-                return targetService;
+                return targetService.ScopeEnum.Equals(scope) ? targetService : null;
             }
 
             else
             {
-                return null;
+                targetService = (T)Activator.CreateInstance(typeof(T));
+
+                if (targetService.ScopeEnum.Equals(scope))
+                {
+                    RegisterService(targetService);
+                    return targetService;
+                }
+
+                else
+                {
+                    return null;
+                }
             }
         }
-    }
 
-    public void RegisterService<T>(T type) where T : IService
-    {
-   
-        ref var serviceScope = ref GetScopeByEnum(type.ScopeEnum);
-        serviceScope.RegisterService(type);
-    }
-
-    public void DeregisterService<T>(Scope scope) where T : class, IService
-    {
-        ref var serviceScope = ref GetScopeByEnum(scope);
-        serviceScope.DeregisterService<T>();
-    }
-
-    private ref ServiceScope GetScopeByEnum(Scope scope)
-    {
-        switch (scope)
+        public void RegisterService<T>(T type) where T : IService
         {
-            case Scope.APPLICATION:
-                return ref _applicationScope;
 
-            case Scope.GAMEPLAY:
-                return ref _gamePlayScope;
+            ref var serviceScope = ref GetScopeByEnum(type.ScopeEnum);
+            serviceScope.RegisterService(type);
+        }
 
-            default: return ref _nullScope;
+        public void DeregisterService<T>(Scope scope) where T : class, IService
+        {
+            ref var serviceScope = ref GetScopeByEnum(scope);
+            serviceScope.DeregisterService<T>();
+        }
+
+        private ref ServiceScope GetScopeByEnum(Scope scope)
+        {
+            switch (scope)
+            {
+                case Scope.APPLICATION:
+                    return ref _applicationScope;
+
+                case Scope.GAMEPLAY:
+                    return ref _gamePlayScope;
+
+                default: return ref _nullScope;
+            }
+        }
+
+        private void DestroyScopeInternal(ref ServiceScope scope)
+        {
+            scope.DestroyScope();
+            scope = null;
+        }
+
+        private bool IsScopeActive(Scope scope)
+        {
+            ref var serviceScope = ref GetScopeByEnum(scope);
+
+            return serviceScope != null && !serviceScope.Equals(_nullScope);
         }
     }
-
-    private void DestroyScopeInternal(ref ServiceScope scope)
-    {
-        scope.DestroyScope();
-        scope = null;
-    }
-
-    private bool IsScopeActive(Scope scope)
-    {
-        ref var serviceScope = ref GetScopeByEnum(scope);
-
-        return serviceScope != null && !serviceScope.Equals(_nullScope);
-    }
-}
-
-public enum Scope
-{
-    APPLICATION,
-    GAMEPLAY
 }

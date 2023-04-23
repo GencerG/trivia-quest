@@ -1,7 +1,10 @@
 using System.Collections;
 
-public interface IScene
+namespace TriviaQuest.Core.Scenes
 {
-    IEnumerator Initialize();
-    void Destroy();
+    public interface IScene
+    {
+        IEnumerator Initialize();
+        void Destroy();
+    }
 }

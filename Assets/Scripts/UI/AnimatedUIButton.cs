@@ -2,22 +2,24 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
 
-
-public class AnimatedUIButton : Button
+namespace TriviaQuest.UI
 {
-    public override void OnPointerClick(PointerEventData eventData)
+    public class AnimatedUIButton : Button
     {
-        // override to mute
-    }
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            // override to mute
+        }
 
-    public override void OnPointerDown(PointerEventData eventData)
-    {
-        transform.localScale *= 0.9f;
-    }
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            transform.localScale *= 0.9f;
+        }
 
-    public override void OnPointerUp(PointerEventData eventData)
-    {
-        transform.localScale = Vector3.one;
-        onClick?.Invoke();
+        public override void OnPointerUp(PointerEventData eventData)
+        {
+            transform.localScale = Vector3.one;
+            onClick?.Invoke();
+        }
     }
 }

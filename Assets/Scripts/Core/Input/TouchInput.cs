@@ -1,27 +1,30 @@
 using UnityEngine;
 
-public class TouchInput : IUserInput
+namespace TriviaQuest.Core.UserInput
 {
-    public Vector3 GetTouchPosition()
+    public class TouchInput : IUserInput
     {
-       return Input.GetTouch(0).position;
-    }
-
-    public TouchState GetTouchState()
-    {
-        if (Input.touchCount <= 0) return TouchState.NONE;
-
-        var touch = Input.GetTouch(0);
-
-        switch (touch.phase)
+        public Vector3 GetTouchPosition()
         {
-            case TouchPhase.Began:
-                return TouchState.STARTED;
-
-            case TouchPhase.Ended:
-                return TouchState.ENDED;
+            return Input.GetTouch(0).position;
         }
 
-        return TouchState.NONE;
+        public TouchState GetTouchState()
+        {
+            if (Input.touchCount <= 0) return TouchState.NONE;
+
+            var touch = Input.GetTouch(0);
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    return TouchState.STARTED;
+
+                case TouchPhase.Ended:
+                    return TouchState.ENDED;
+            }
+
+            return TouchState.NONE;
+        }
     }
 }

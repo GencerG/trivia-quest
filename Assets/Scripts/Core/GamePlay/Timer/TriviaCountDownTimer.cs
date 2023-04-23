@@ -1,124 +1,129 @@
 using System.Collections;
 using System.Collections.Generic;
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
 using UnityEngine;
 
-public class TriviaCountDownTimer : MonoBehaviour
+namespace TriviaQuest.Core.Gameplay
 {
-    private List<IUpdateablePerSecond> _updateables;
-    private List<ITimerListener> _listeners;
-    private Coroutine _countDownRoutine;
-    private readonly YieldInstruction _oneSecond = new WaitForSeconds(1f);
-    private TriviaQuestController _controller;
-
-    private int _secondsLeft;
-    private int _duration;
-    private bool _paused;
-
-    public void Initialize(TriviaQuestController controller)
+    public class TriviaCountDownTimer : MonoBehaviour
     {
-        _controller = controller;
-        _updateables = new List<IUpdateablePerSecond>();
-        _listeners = new List<ITimerListener>();
-        _duration = ScopeManager.Instance.GetService<GameStrategyService>(Scope.GAMEPLAY).GetStageDuration();
-        _secondsLeft = _duration;
-    }
+        private List<IUpdateablePerSecond> _updateables;
+        private List<ITimerListener> _listeners;
+        private Coroutine _countDownRoutine;
+        private readonly YieldInstruction _oneSecond = new WaitForSeconds(1f);
+        private TriviaQuestController _controller;
 
-    public void Clear()
-    {
-        _updateables.Clear();
-        _listeners.Clear();
-        _countDownRoutine = null;
-    }
+        private int _secondsLeft;
+        private int _duration;
+        private bool _paused;
 
-    public void AddUpdateable(IUpdateablePerSecond updateable)
-    {
-        _updateables.Add(updateable);
-    }
-
-    public void AddListener(ITimerListener listener)
-    {
-        _listeners.Add(listener);
-    }
-
-    public void ResetTimer()
-    {
-        _secondsLeft = _duration;
-    }
-
-    public void StartTimer()
-    {
-        _countDownRoutine = StartCoroutine(CountDownRoutine());
-        StartAll();
-    }
-
-    public void PauseTimer()
-    {
-        _paused = true;
-    }
-
-    public void UnPauseTimer()
-    {
-        _paused = false;
-    }
-
-    public void StopTimer()
-    {
-        if (_countDownRoutine != null)
+        public void Initialize(TriviaQuestController controller)
         {
-            StopCoroutine(_countDownRoutine);
+            _controller = controller;
+            _updateables = new List<IUpdateablePerSecond>();
+            _listeners = new List<ITimerListener>();
+            _duration = ScopeManager.Instance.GetService<GameStrategyService>(Scope.GAMEPLAY).GetStageDuration();
+            _secondsLeft = _duration;
+        }
+
+        public void Clear()
+        {
+            _updateables.Clear();
+            _listeners.Clear();
             _countDownRoutine = null;
         }
 
-        ResetTimer();
-    }
-
-    private IEnumerator CountDownRoutine()
-    {
-        while (true)
+        public void AddUpdateable(IUpdateablePerSecond updateable)
         {
-            while (_paused)
+            _updateables.Add(updateable);
+        }
+
+        public void AddListener(ITimerListener listener)
+        {
+            _listeners.Add(listener);
+        }
+
+        public void ResetTimer()
+        {
+            _secondsLeft = _duration;
+        }
+
+        public void StartTimer()
+        {
+            _countDownRoutine = StartCoroutine(CountDownRoutine());
+            StartAll();
+        }
+
+        public void PauseTimer()
+        {
+            _paused = true;
+        }
+
+        public void UnPauseTimer()
+        {
+            _paused = false;
+        }
+
+        public void StopTimer()
+        {
+            if (_countDownRoutine != null)
             {
-                yield return null;
+                StopCoroutine(_countDownRoutine);
+                _countDownRoutine = null;
             }
 
-            yield return _oneSecond;
+            ResetTimer();
+        }
 
-            _secondsLeft--;
-            UpdateAll(_secondsLeft);
-
-            if (_secondsLeft > 0 )
+        private IEnumerator CountDownRoutine()
+        {
+            while (true)
             {
-                continue;
+                while (_paused)
+                {
+                    yield return null;
+                }
+
+                yield return _oneSecond;
+
+                _secondsLeft--;
+                UpdateAll(_secondsLeft);
+
+                if (_secondsLeft > 0)
+                {
+                    continue;
+                }
+
+                StopAll();
+                yield return _controller.OnTimeOut();
+
+                yield break;
             }
-
-            StopAll();
-            yield return _controller.OnTimeOut();
-
-            yield break;
         }
-    }
 
-    private void StartAll()
-    {
-        foreach (var listener in _listeners)
+        private void StartAll()
         {
-            listener.OnTimerStart(_duration);
+            foreach (var listener in _listeners)
+            {
+                listener.OnTimerStart(_duration);
+            }
         }
-    }
 
-    private void UpdateAll(int secondsLeft)
-    {
-        foreach (var updateable in _updateables)
+        private void UpdateAll(int secondsLeft)
         {
-            updateable.OnUpdate(secondsLeft);
+            foreach (var updateable in _updateables)
+            {
+                updateable.OnUpdate(secondsLeft);
+            }
         }
-    }
 
-    private void StopAll()
-    {
-        foreach (var listener in _listeners)
+        private void StopAll()
         {
-            listener.OnTimerStop();
+            foreach (var listener in _listeners)
+            {
+                listener.OnTimerStop();
+            }
         }
     }
 }

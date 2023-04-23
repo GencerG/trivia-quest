@@ -1,15 +1,20 @@
 using TMPro;
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
 using UnityEngine;
 
-public class LevelEndPopup : Popup
+namespace TriviaQuest.UI
 {
-    [SerializeField] private TMP_Text _scoreText;
-
-    public override string Name => GetType().Name;
-
-    public override void OnPopupCreated()
+    public class LevelEndPopup : Popup
     {
-        var score = ScopeManager.Instance.GetService<ScoreService>(Scope.GAMEPLAY).GetCurrentScore();
-        _scoreText.text = $"Your Score: {score}";
+        [SerializeField] private TMP_Text _scoreText;
+
+        public override string Name => GetType().Name;
+
+        public override void OnPopupCreated()
+        {
+            var score = ScopeManager.Instance.GetService<ScoreService>(Scope.GAMEPLAY).GetCurrentScore();
+            _scoreText.text = $"Your Score: {score}";
+        }
     }
 }

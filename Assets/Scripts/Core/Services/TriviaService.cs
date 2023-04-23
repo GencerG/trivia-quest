@@ -1,93 +1,101 @@
 using System.Collections;
 using System.Collections.Generic;
+using TriviaQuest.Core.Gameplay;
+using TriviaQuest.Core.Scenes;
+using TriviaQuest.Core.ServiceScope;
+using TriviaQuest.UI;
 using UnityEngine;
 
-public class TriviaService :  IService
+namespace TriviaQuest.Core.Services
 {
-    public Scope ScopeEnum => Scope.GAMEPLAY;
-
-    private List<QuestionData> _questionDataList;
-    private TriviaQuestController _questionContainer;
-
-    private int _currentQuestionIndex;
-    private bool _shouldRandom;
-
-    public IEnumerator Initialize()
+    public class TriviaService : IService
     {
-        var scopeManager = ScopeManager.Instance;
+        public Scope ScopeEnum => Scope.GAMEPLAY;
 
-        yield return scopeManager.GetService<WebRequestService>(Scope.APPLICATION).RequestQuestions(data => 
+        private List<QuestionData> _questionDataList;
+        private TriviaQuestController _questionContainer;
+
+        private int _currentQuestionIndex;
+        private bool _shouldRandom;
+
+        public IEnumerator Initialize()
         {
-            _questionDataList = data.questions;
-        });
+            var scopeManager = ScopeManager.Instance;
 
-        if (_questionDataList == null || _questionDataList.Count == 0)
-        {
-            scopeManager.GetService<SceneService>(Scope.APPLICATION).ChangeScene(Scene.MAIN_MENU);
-            yield break;
-        }
-        
-        _shouldRandom = scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).ShouldSelectQuestionRandomly();
-
-        var questionContainerPrefab = scopeManager.GetService<ResourceService>(Scope.APPLICATION).GetPrefab<TriviaQuestController>("QuestionContainer");
-        _questionContainer = Object.Instantiate(questionContainerPrefab);
-
-        _questionContainer.Initialize(GetQuestionData());
-    }
-
-    public QuestionData RequestNextQuestion()
-    {
-        return GetQuestionData();
-    }
-
-    public void EndLevel()
-    {
-        var scopeManager = ScopeManager.Instance;
-        scopeManager.GetService<InputService>(Scope.GAMEPLAY).InputListener.Enable(false);
-        _questionContainer.EndLevel(() =>
-        {
-            var popupService = scopeManager.GetService<PopupService>(Scope.APPLICATION);
-            var levelEndPopup = popupService.ShowPopup<LevelEndPopup>();
-            levelEndPopup.SetCloseCallback(() =>
+            yield return scopeManager.GetService<WebRequestService>(Scope.APPLICATION).RequestQuestions(data =>
             {
-                scopeManager.GetService<SceneService>(Scope.APPLICATION).ChangeScene(Scene.MAIN_MENU);
+                _questionDataList = data.questions;
             });
-        });
-    }
 
-    private QuestionData GetQuestionData()
-    {
-        if (_questionDataList == null || _questionDataList.Count == 0)
-        {
-            return null;
+            if (_questionDataList == null || _questionDataList.Count == 0)
+            {
+                scopeManager.GetService<SceneService>(Scope.APPLICATION).ChangeScene(TriviaQuestScene.MAIN_MENU);
+                yield break;
+            }
+
+            _shouldRandom = scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).ShouldSelectQuestionRandomly();
+
+            var questionContainerPrefab = scopeManager.GetService<ResourceService>(Scope.APPLICATION).GetPrefab<TriviaQuestController>("QuestionContainer");
+            _questionContainer = Object.Instantiate(questionContainerPrefab);
+
+            _questionContainer.Initialize(GetQuestionData());
         }
 
-        if (_shouldRandom)
+        public QuestionData RequestNextQuestion()
         {
-            if (_questionDataList.Count == 0)
+            return GetQuestionData();
+        }
+
+        public void EndLevel(bool animate = true)
+        {
+            var scopeManager = ScopeManager.Instance;
+            scopeManager.GetService<InputService>(Scope.GAMEPLAY).InputListener.Enable(false);
+            _questionContainer.EndLevel(() =>
             {
-                EndLevel();
+                var popupService = scopeManager.GetService<PopupService>(Scope.APPLICATION);
+                var levelEndPopup = popupService.ShowPopup<LevelEndPopup>();
+                levelEndPopup.SetCloseCallback(() =>
+                {
+                    scopeManager.GetService<SceneService>(Scope.APPLICATION).ChangeScene(TriviaQuestScene.MAIN_MENU);
+                });
+            }, animate);
+        }
+
+        private QuestionData GetQuestionData()
+        {
+            if (_questionDataList == null || _questionDataList.Count == 0)
+            {
                 return null;
             }
 
-            var question = _questionDataList[Random.Range(0, _questionDataList.Count)];
-            _questionDataList.Remove(question);
-            return question;
-        }
-        else
-        {
-            if (_currentQuestionIndex >= _questionDataList.Count - 1)
+            if (_shouldRandom)
             {
-                EndLevel();
-                return null;
+                if (_questionDataList.Count == 0)
+                {
+                    EndLevel();
+                    return null;
+                }
+
+                var question = _questionDataList[Random.Range(0, _questionDataList.Count)];
+                _questionDataList.Remove(question);
+                return question;
             }
+            else
+            {
+                if (_currentQuestionIndex >= _questionDataList.Count - 1)
+                {
+                    EndLevel();
+                    return null;
+                }
 
-            return _questionDataList[Mathf.Min(_currentQuestionIndex++, _questionDataList.Count - 1)];
+                _currentQuestionIndex++;
+                return _questionDataList[Mathf.Min(_currentQuestionIndex, _questionDataList.Count - 1)];
+            }
         }
-    }
 
-    public void Destroy()
-    {
+        public void Destroy()
+        {
 
+        }
     }
 }

@@ -1,47 +1,53 @@
-public class ScoreService : IService
+using TriviaQuest.Core.Gameplay;
+using TriviaQuest.Core.ServiceScope;
+
+namespace TriviaQuest.Core.Services
 {
-    public Scope ScopeEnum => Scope.GAMEPLAY;
-
-    private int _currentScore;
-    private int _winAmount;
-
-    public void UpdateScore(QuestionAnswer answer)
+    public class ScoreService : IService
     {
-        var gameStrategyService = ScopeManager.Instance.GetService<GameStrategyService>(Scope.GAMEPLAY);
+        public Scope ScopeEnum => Scope.GAMEPLAY;
 
-        switch (answer)
+        private int _currentScore;
+        private int _winAmount;
+
+        public void UpdateScore(QuestionAnswer answer)
         {
-            case QuestionAnswer.CORRECT:
-                _winAmount = gameStrategyService.GetCorrectAnswerScore();
-                break;
+            var gameStrategyService = ScopeManager.Instance.GetService<GameStrategyService>(Scope.GAMEPLAY);
 
-            case QuestionAnswer.WRONG:
-                _winAmount = gameStrategyService.GetWrongAnswerScore();
-                break;
+            switch (answer)
+            {
+                case QuestionAnswer.CORRECT:
+                    _winAmount = gameStrategyService.GetCorrectAnswerScore();
+                    break;
 
-            case QuestionAnswer.TIME_OUT:
-                _winAmount = gameStrategyService.GetTimeoutScore();
-                break;
+                case QuestionAnswer.WRONG:
+                    _winAmount = gameStrategyService.GetWrongAnswerScore();
+                    break;
 
-            default:
-                break;
+                case QuestionAnswer.TIME_OUT:
+                    _winAmount = gameStrategyService.GetTimeoutScore();
+                    break;
+
+                default:
+                    break;
+            }
+
+            _currentScore += _winAmount;
         }
 
-        _currentScore += _winAmount;
-    }
+        public int GetCurrentScore()
+        {
+            return _currentScore;
+        }
 
-    public int GetCurrentScore()
-    {
-        return _currentScore;
-    }
+        public int GetWinAmount()
+        {
+            return _winAmount;
+        }
 
-    public int GetWinAmount()
-    {
-        return _winAmount;
-    }
+        public void Destroy()
+        {
 
-    public void Destroy()
-    {
-       
+        }
     }
 }

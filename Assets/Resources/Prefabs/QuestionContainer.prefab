@@ -162,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3013919366273743145, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TriviaQuestController, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.TriviaQuestController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3013919366273743145, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
@@ -170,7 +170,7 @@ PrefabInstance:
       objectReference: {fileID: 6111072546540566320}
     - target: {fileID: 3013919366273743145, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: QuestionChoice, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.QuestionChoice, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4294955208529504336, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -194,7 +194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4294955208529504336, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TriviaQuestController, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.TriviaQuestController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4294955208529504336, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
@@ -202,7 +202,7 @@ PrefabInstance:
       objectReference: {fileID: 5082255736097400393}
     - target: {fileID: 4294955208529504336, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: QuestionChoice, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.QuestionChoice, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5666252594411404206, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -234,7 +234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6671174544178659698, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TriviaQuestController, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.TriviaQuestController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6671174544178659698, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
@@ -242,7 +242,7 @@ PrefabInstance:
       objectReference: {fileID: 2416663115165749099}
     - target: {fileID: 6671174544178659698, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: QuestionChoice, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.QuestionChoice, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6695649809925586434, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -330,7 +330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8538704721719159242, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TriviaQuestController, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.TriviaQuestController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8538704721719159242, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
@@ -338,7 +338,7 @@ PrefabInstance:
       objectReference: {fileID: 820465608639309779}
     - target: {fileID: 8538704721719159242, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: QuestionChoice, Assembly-CSharp
+      value: TriviaQuest.Core.Gameplay.QuestionChoice, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb974722da2a6404a8ba325c7f8774f9, type: 3}

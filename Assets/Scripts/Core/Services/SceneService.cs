@@ -1,100 +1,98 @@
 using System.Collections;
+using TriviaQuest.Core.Scenes;
+using TriviaQuest.Core.ServiceScope;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneService : MonoBehaviour, IService
+namespace TriviaQuest.Core.Services
 {
-    public Scope ScopeEnum => Scope.APPLICATION;
-
-    private Coroutine _currentSceneChangeRoutine;
-    private IScene _activeScene;
-    private LoadingScreenDisplayer _loadingScreenDisplayer;
-
-    private void Awake()
+    public class SceneService : MonoBehaviour, IService
     {
-        var resourceService = ScopeManager.Instance.GetService<ResourceService>(Scope.APPLICATION);
-        _loadingScreenDisplayer = Instantiate(resourceService.GetPrefab<LoadingScreenDisplayer>("LoadingScreenDisplayer"), transform);
-        ChangeScene(Scene.MAIN_MENU);
-    }
+        public Scope ScopeEnum => Scope.APPLICATION;
 
-    public void ChangeScene(Scene scene)
-    {
-        if (_currentSceneChangeRoutine != null)
+        private Coroutine _currentSceneChangeRoutine;
+        private IScene _activeScene;
+        private LoadingScreenDisplayer _loadingScreenDisplayer;
+
+        private void Awake()
         {
-            Debug.LogWarning("Trying to change scene while there is active transition, killing current transition");
+            var resourceService = ScopeManager.Instance.GetService<ResourceService>(Scope.APPLICATION);
+            _loadingScreenDisplayer = Instantiate(resourceService.GetPrefab<LoadingScreenDisplayer>("LoadingScreenDisplayer"), transform);
+            ChangeScene(TriviaQuestScene.MAIN_MENU);
+        }
 
-            StopCoroutine(_currentSceneChangeRoutine);
+        public void ChangeScene(TriviaQuestScene scene)
+        {
+            if (_currentSceneChangeRoutine != null)
+            {
+                Debug.LogWarning("Trying to change scene while there is active transition, killing current transition");
+
+                StopCoroutine(_currentSceneChangeRoutine);
+                _currentSceneChangeRoutine = null;
+            }
+
+            _currentSceneChangeRoutine = StartCoroutine(SceneChangeRoutine(scene));
+        }
+
+        private IEnumerator SceneChangeRoutine(TriviaQuestScene scene)
+        {
+            yield return _loadingScreenDisplayer.FadeIn();
+
+            _activeScene?.Destroy();
+            _activeScene = null;
+
+            yield return null;
+
+            SceneManager.LoadScene(GetSceneName(TriviaQuestScene.EMPTY));
+            var asyncLoad = SceneManager.LoadSceneAsync(GetSceneName(scene));
+
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+
+            _activeScene = CreateActiveScene(scene);
+            yield return _activeScene.Initialize();
+            yield return null;
+
+            yield return _loadingScreenDisplayer.FadeOut();
             _currentSceneChangeRoutine = null;
         }
 
-        _currentSceneChangeRoutine = StartCoroutine(SceneChangeRoutine(scene));
-    }
-
-    private IEnumerator SceneChangeRoutine(Scene scene)
-    {
-        yield return _loadingScreenDisplayer.FadeIn();
-
-        _activeScene?.Destroy();
-        _activeScene = null;
-
-        yield return null;
-
-        SceneManager.LoadScene(GetSceneName(Scene.EMPTY));
-        var asyncLoad = SceneManager.LoadSceneAsync(GetSceneName(scene));
-
-        while(!asyncLoad.isDone)
+        private IScene CreateActiveScene(TriviaQuestScene scene)
         {
-            yield return null;
+            switch (scene)
+            {
+                case TriviaQuestScene.GAMEPLAY:
+                    return new GamePlayScene();
+
+                case TriviaQuestScene.MAIN_MENU:
+                    return new MainMenuScene();
+
+                default: return null;
+            }
         }
 
-        _activeScene = CreateActiveScene(scene);
-        yield return _activeScene.Initialize();
-        yield return null;
-
-        yield return _loadingScreenDisplayer.FadeOut();
-        _currentSceneChangeRoutine = null;
-    }
-
-    private IScene CreateActiveScene(Scene scene)
-    {
-        switch (scene)
+        private string GetSceneName(TriviaQuestScene scene)
         {
-            case Scene.GAMEPLAY:
-                return new GamePlayScene();
+            switch (scene)
+            {
+                case TriviaQuestScene.EMPTY:
+                    return "EmptyScene";
 
-            case Scene.MAIN_MENU:
-                return new MainMenuScene();
+                case TriviaQuestScene.GAMEPLAY:
+                    return "GamePlayScene";
 
-            default: return null;
+                case TriviaQuestScene.MAIN_MENU:
+                    return "MainMenuScene";
+
+                default: return "MainMenuScene";
+            }
+        }
+
+        public void Destroy()
+        {
+
         }
     }
-
-    private string GetSceneName(Scene scene)
-    {
-        switch (scene)
-        {
-            case Scene.EMPTY:
-                return "EmptyScene";
-
-            case Scene.GAMEPLAY:
-                return "GamePlayScene";
-
-            case Scene.MAIN_MENU:
-                return "MainMenuScene";
-
-            default: return "MainMenuScene";
-        }
-    }
-
-    public void Destroy()
-    {
-       
-    }
-}
-
-public enum Scene
-{
-    EMPTY,
-    MAIN_MENU,
-    GAMEPLAY
 }

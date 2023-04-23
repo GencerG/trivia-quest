@@ -1,47 +1,51 @@
 using System;
 using System.Collections.Generic;
+using TriviaQuest.Core.Services;
 using UnityEngine;
 
-public class ServiceScope
+namespace TriviaQuest.Core.ServiceScope
 {
-    public GameObject ScopeObject;
-
-    private readonly Dictionary<Type, IService> _serviceDictionary = new();
-
-    public ServiceScope(string name)
+    public class ServiceScope
     {
-        ScopeObject = new GameObject(name);
-        Debug.Log($"Scope created with name: {name}");
-    }
+        public GameObject ScopeObject;
 
-    public T GetService<T>() where T : class, IService
-    {
-        return _serviceDictionary.TryGetValue(typeof(T), out var value) ? (T)value : null;
-    }
+        private readonly Dictionary<Type, IService> _serviceDictionary = new();
 
-    public void RegisterService<T>(T type) where T : IService
-    {
-        _serviceDictionary.Add(typeof(T), type);
-    }
-
-    public void DeregisterService<T>() where T : class, IService
-    {
-        var targetService = GetService<T>();
-        if (targetService != null)
+        public ServiceScope(string name)
         {
-            targetService.Destroy();
-            _serviceDictionary.Remove(typeof(T));
-        }
-    }
-
-    public void DestroyScope()
-    {
-        foreach (var service in _serviceDictionary.Values)
-        {
-            service.Destroy();
+            ScopeObject = new GameObject(name);
+            Debug.Log($"Scope created with name: {name}");
         }
 
-        UnityEngine.Object.Destroy(ScopeObject);
+        public T GetService<T>() where T : class, IService
+        {
+            return _serviceDictionary.TryGetValue(typeof(T), out var value) ? (T)value : null;
+        }
+
+        public void RegisterService<T>(T type) where T : IService
+        {
+            _serviceDictionary.Add(typeof(T), type);
+        }
+
+        public void DeregisterService<T>() where T : class, IService
+        {
+            var targetService = GetService<T>();
+            if (targetService != null)
+            {
+                targetService.Destroy();
+                _serviceDictionary.Remove(typeof(T));
+            }
+        }
+
+        public void DestroyScope()
+        {
+            foreach (var service in _serviceDictionary.Values)
+            {
+                service.Destroy();
+            }
+
+            UnityEngine.Object.Destroy(ScopeObject);
+        }
     }
 }
 

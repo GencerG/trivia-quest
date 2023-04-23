@@ -1,6 +1,9 @@
-public interface ITimerListener
+namespace TriviaQuest.Core.Gameplay
 {
-    void OnTimerStart(int duration);
+    public interface ITimerListener
+    {
+        void OnTimerStart(int duration);
 
-    void OnTimerStop();
+        void OnTimerStop();
+    }
 }

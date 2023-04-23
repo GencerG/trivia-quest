@@ -1,37 +1,40 @@
-public class TriviaQuestStrategy : IGameStrategy
+namespace TriviaQuest.Core.GameStrategy
 {
-    public int GetCorrectAnswerScore()
+    public class TriviaQuestStrategy : IGameStrategy
     {
-        return 10;
-    }
+        public int GetCorrectAnswerScore()
+        {
+            return 10;
+        }
 
-    public int GetWrongAnswerScore()
-    {
-        return -5;
-    }
+        public int GetWrongAnswerScore()
+        {
+            return -5;
+        }
 
-    public bool ShouldUseTimer()
-    {
-        return true;
-    }
+        public bool ShouldUseTimer()
+        {
+            return true;
+        }
 
-    public int GetStageDuration()
-    {
-        return 20;
-    }
+        public int GetStageDuration()
+        {
+            return 20;
+        }
 
-    public int GetTimeoutScore()
-    {
-        return -3;
-    }
+        public int GetTimeoutScore()
+        {
+            return -3;
+        }
 
-    public int GetQuestionLimit()
-    {
-        return 10;
-    }
+        public int GetQuestionLimit()
+        {
+            return 10;
+        }
 
-    public bool ShouldSelectQuestionRandomly()
-    {
-        return false;
-    }  
+        public bool ShouldSelectQuestionRandomly()
+        {
+            return false;
+        }
+    }
 }

@@ -1,24 +1,29 @@
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
 using UnityEngine;
 
-public class LeaderboardPopup : Popup
+namespace TriviaQuest.UI
 {
-    public override string Name => GetType().Name;
-
-    [SerializeField] private LeaderboardEntry _leaderboardEntry;
-    [SerializeField] private RectTransform _content;
-
-    public override void OnPopupCreated()
+    public class LeaderboardPopup : Popup
     {
-        var webService = ScopeManager.Instance.GetService<WebRequestService>(Scope.APPLICATION);
-        StartCoroutine(webService.RequestLeaderboard(CreateLeaderboard));
-    }
+        public override string Name => GetType().Name;
 
-    private void CreateLeaderboard(LeaderboardPageData data)
-    {
-        foreach (var player in data.data)
+        [SerializeField] private LeaderboardEntry _leaderboardEntry;
+        [SerializeField] private RectTransform _content;
+
+        public override void OnPopupCreated()
         {
-            var entry = Instantiate(_leaderboardEntry, _content);
-            entry.Initialize(player);
+            var webService = ScopeManager.Instance.GetService<WebRequestService>(Scope.APPLICATION);
+            StartCoroutine(webService.RequestLeaderboard(CreateLeaderboard));
+        }
+
+        private void CreateLeaderboard(LeaderboardPageData data)
+        {
+            foreach (var player in data.data)
+            {
+                var entry = Instantiate(_leaderboardEntry, _content);
+                entry.Initialize(player);
+            }
         }
     }
 }

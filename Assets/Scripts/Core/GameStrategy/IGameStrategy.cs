@@ -1,16 +1,19 @@
-public interface IGameStrategy
+namespace TriviaQuest.Core.GameStrategy
 {
-    int GetCorrectAnswerScore();
+    public interface IGameStrategy
+    {
+        int GetCorrectAnswerScore();
 
-    int GetWrongAnswerScore();
+        int GetWrongAnswerScore();
 
-    bool ShouldUseTimer();
+        bool ShouldUseTimer();
 
-    int GetStageDuration();
+        int GetStageDuration();
 
-    int GetTimeoutScore();
+        int GetTimeoutScore();
 
-    bool ShouldSelectQuestionRandomly();
+        bool ShouldSelectQuestionRandomly();
 
-    int GetQuestionLimit();
+        int GetQuestionLimit();
+    }
 }

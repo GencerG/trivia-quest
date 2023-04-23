@@ -1,3 +1,5 @@
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
 using UnityEngine;
 
 public static class Bootstrapper

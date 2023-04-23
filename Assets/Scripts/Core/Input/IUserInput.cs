@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public interface IUserInput
+namespace TriviaQuest.Core.UserInput
 {
-    TouchState GetTouchState();
-    Vector3 GetTouchPosition();
+    public interface IUserInput
+    {
+        TouchState GetTouchState();
+        Vector3 GetTouchPosition();
+    }
 }

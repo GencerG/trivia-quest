@@ -1,23 +1,29 @@
 using System.Collections;
-public class GamePlayScene : IScene
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
+
+namespace TriviaQuest.Core.Scenes
 {
-    public void Destroy()
+    public class GamePlayScene : IScene
     {
-        ScopeManager.Instance.DestroyScope(Scope.GAMEPLAY);
-    }
+        public void Destroy()
+        {
+            ScopeManager.Instance.DestroyScope(Scope.GAMEPLAY);
+        }
 
-    public IEnumerator Initialize()
-    {
-        var scopeManager = ScopeManager.Instance;
-        scopeManager.CreateScope(Scope.GAMEPLAY);
+        public IEnumerator Initialize()
+        {
+            var scopeManager = ScopeManager.Instance;
+            scopeManager.CreateScope(Scope.GAMEPLAY);
 
-        yield return null;
+            yield return null;
 
-        scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).Initialize(GameMode.TRIVIA_QUEST);
-        scopeManager.GetService<InputService>(Scope.GAMEPLAY).Initialize();
+            scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).Initialize(GameMode.TRIVIA_QUEST);
+            scopeManager.GetService<InputService>(Scope.GAMEPLAY).Initialize();
 
-        yield return scopeManager.GetService<TriviaService>(Scope.GAMEPLAY).Initialize();
+            yield return scopeManager.GetService<TriviaService>(Scope.GAMEPLAY).Initialize();
 
-        yield return null;
+            yield return null;
+        }
     }
 }

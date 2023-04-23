@@ -1,20 +1,23 @@
 using UnityEngine;
 
-public class MouseInput : IUserInput
+namespace TriviaQuest.Core.UserInput
 {
-    public Vector3 GetTouchPosition()
+    public class MouseInput : IUserInput
     {
-        return Input.mousePosition;
-    }
+        public Vector3 GetTouchPosition()
+        {
+            return Input.mousePosition;
+        }
 
-    public TouchState GetTouchState()
-    {
-        if (Input.GetMouseButtonDown(0))
-            return TouchState.STARTED;
+        public TouchState GetTouchState()
+        {
+            if (Input.GetMouseButtonDown(0))
+                return TouchState.STARTED;
 
-        if (Input.GetMouseButtonUp(0))
-            return TouchState.ENDED;
+            if (Input.GetMouseButtonUp(0))
+                return TouchState.ENDED;
 
-        return TouchState.NONE;
+            return TouchState.NONE;
+        }
     }
 }

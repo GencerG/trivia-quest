@@ -1,59 +1,65 @@
-public class GameStrategyService : IService
+using TriviaQuest.Core.GameStrategy;
+using TriviaQuest.Core.ServiceScope;
+
+namespace TriviaQuest.Core.Services
 {
-    public Scope ScopeEnum => Scope.GAMEPLAY;
-
-    private IGameStrategy _currentStrategy;
-
-    public void Initialize(GameMode gameMode)
+    public class GameStrategyService : IService
     {
-        switch (gameMode)
+        public Scope ScopeEnum => Scope.GAMEPLAY;
+
+        private IGameStrategy _currentStrategy;
+
+        public void Initialize(GameMode gameMode)
         {
-            default:
-            case GameMode.TRIVIA_QUEST:
-                _currentStrategy = new TriviaQuestStrategy();
-                break;
+            switch (gameMode)
+            {
+                default:
+                case GameMode.TRIVIA_QUEST:
+                    _currentStrategy = new TriviaQuestStrategy();
+                    break;
+            }
         }
-    }
 
-    public int GetCorrectAnswerScore()
-    {
-        return _currentStrategy.GetCorrectAnswerScore();
-    }
+        public int GetCorrectAnswerScore()
+        {
+            return _currentStrategy.GetCorrectAnswerScore();
+        }
 
-    public int GetWrongAnswerScore()
-    {
-        return _currentStrategy.GetWrongAnswerScore();
-    }
+        public int GetWrongAnswerScore()
+        {
+            return _currentStrategy.GetWrongAnswerScore();
+        }
 
-    public bool ShouldUseTimer()
-    {
-        return _currentStrategy.ShouldUseTimer();
-    }
+        public bool ShouldUseTimer()
+        {
+            return _currentStrategy.ShouldUseTimer();
+        }
 
-    public int GetStageDuration()
-    {
-        return _currentStrategy.GetStageDuration();
-    }
+        public int GetStageDuration()
+        {
+            return _currentStrategy.GetStageDuration();
+        }
 
-    public int GetTimeoutScore()
-    {
-        return _currentStrategy.GetTimeoutScore();
-    }
+        public int GetTimeoutScore()
+        {
+            return _currentStrategy.GetTimeoutScore();
+        }
 
-    public bool ShouldSelectQuestionRandomly()
-    {
-        return _currentStrategy.ShouldSelectQuestionRandomly();
-    }
+        public bool ShouldSelectQuestionRandomly()
+        {
+            return _currentStrategy.ShouldSelectQuestionRandomly();
+        }
 
-    public int GetQuestionLimit()
-    {
-        return _currentStrategy.GetQuestionLimit();
-    }
+        public int GetQuestionLimit()
+        {
+            return _currentStrategy.GetQuestionLimit();
+        }
 
 
-    public void Destroy()
-    {
-        
+        public void Destroy()
+        {
+
+        }
     }
 }
 

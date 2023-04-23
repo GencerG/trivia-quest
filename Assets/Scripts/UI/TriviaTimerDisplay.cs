@@ -1,32 +1,36 @@
 using TMPro;
+using TriviaQuest.Core.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TriviaTimerDisplay : MonoBehaviour, IUpdateablePerSecond, ITimerListener
+namespace TriviaQuest.UI
 {
-    [SerializeField] private TMP_Text _timerText;
-    [SerializeField] private Image _backgroundImage;
-
-    private int _duration;
-
-    public void OnTimerStart(int duration)
+    public class TriviaTimerDisplay : MonoBehaviour, IUpdateablePerSecond, ITimerListener
     {
-        _duration = duration;
-        _timerText.text = duration.ToString();
-        _backgroundImage.fillAmount = 1f;
-    }
+        [SerializeField] private TMP_Text _timerText;
+        [SerializeField] private Image _backgroundImage;
 
-    public void OnUpdate(int secondsLeft)
-    {
-        _timerText.text = secondsLeft.ToString();
-        _backgroundImage.fillAmount = (float)secondsLeft / (float)(_duration);
-    }
+        private int _duration;
 
-    public void OnTimerStop()
-    {
-    }
+        public void OnTimerStart(int duration)
+        {
+            _duration = duration;
+            _timerText.text = duration.ToString();
+            _backgroundImage.fillAmount = 1f;
+        }
 
-    public void OnTimeOut()
-    {
+        public void OnUpdate(int secondsLeft)
+        {
+            _timerText.text = secondsLeft.ToString();
+            _backgroundImage.fillAmount = (float)secondsLeft / (float)(_duration);
+        }
+
+        public void OnTimerStop()
+        {
+        }
+
+        public void OnTimeOut()
+        {
+        }
     }
 }

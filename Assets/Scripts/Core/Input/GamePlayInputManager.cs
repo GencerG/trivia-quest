@@ -1,62 +1,68 @@
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
+using TriviaQuest.UI;
 using UnityEngine;
 
-public class GamePlayInputManager
+namespace TriviaQuest.Core.UserInput
 {
-    private const string SPRITE_BUTTON_TAG = "SpriteButton";
-
-    private InputListener _inputListener;
-    private SpriteButton _clickedSpriteButton;
-
-    public GamePlayInputManager()
+    public class GamePlayInputManager
     {
-        _inputListener = ScopeManager.Instance.GetService<InputService>(Scope.GAMEPLAY).InputListener;
+        private const string SPRITE_BUTTON_TAG = "SpriteButton";
 
-        _inputListener.TouchStarted += TouchStarted;
-        _inputListener.TouchEnded += TouchEnded;
-    }
+        private InputListener _inputListener;
+        private SpriteButton _clickedSpriteButton;
 
-    public void TouchStarted(Vector3 touchPosition)
-    {
-        var hitCollider = Physics2D.OverlapPoint(touchPosition);
-        if (hitCollider == null || !hitCollider.CompareTag(SPRITE_BUTTON_TAG))
+        public GamePlayInputManager()
         {
-            return;
+            _inputListener = ScopeManager.Instance.GetService<InputService>(Scope.GAMEPLAY).InputListener;
+
+            _inputListener.TouchStarted += TouchStarted;
+            _inputListener.TouchEnded += TouchEnded;
         }
 
-        if (!hitCollider.TryGetComponent<SpriteButton>(out var spireButton))
+        public void TouchStarted(Vector3 touchPosition)
         {
-            _clickedSpriteButton = null;
-            return;
-        }
-
-        _clickedSpriteButton = spireButton;
-        _clickedSpriteButton.ButtonDown();
-    }
-
-    public void TouchEnded(Vector3 touchPosition)
-    {
-        if (_clickedSpriteButton == null) return;
-
-        var hitCollider = Physics2D.OverlapPoint(touchPosition);
-
-        if (hitCollider != null && hitCollider.TryGetComponent<SpriteButton>(out var spireButton))
-        {
-            if (_clickedSpriteButton.Equals(spireButton))
+            var hitCollider = Physics2D.OverlapPoint(touchPosition);
+            if (hitCollider == null || !hitCollider.CompareTag(SPRITE_BUTTON_TAG))
             {
-                _clickedSpriteButton.ButtonUp(true);
+                return;
+            }
+
+            if (!hitCollider.TryGetComponent<SpriteButton>(out var spireButton))
+            {
+                _clickedSpriteButton = null;
+                return;
+            }
+
+            _clickedSpriteButton = spireButton;
+            _clickedSpriteButton.ButtonDown();
+        }
+
+        public void TouchEnded(Vector3 touchPosition)
+        {
+            if (_clickedSpriteButton == null) return;
+
+            var hitCollider = Physics2D.OverlapPoint(touchPosition);
+
+            if (hitCollider != null && hitCollider.TryGetComponent<SpriteButton>(out var spireButton))
+            {
+                if (_clickedSpriteButton.Equals(spireButton))
+                {
+                    _clickedSpriteButton.ButtonUp(true);
+                    _clickedSpriteButton = null;
+                }
+            }
+            else
+            {
+                _clickedSpriteButton.ButtonUp(false);
                 _clickedSpriteButton = null;
             }
         }
-        else
-        {
-            _clickedSpriteButton.ButtonUp(false);
-            _clickedSpriteButton = null;
-        }
-    }
 
-    public void Destroy()
-    {
-        _inputListener.TouchStarted -= TouchStarted;
-        _inputListener.TouchEnded -= TouchEnded;
+        public void Destroy()
+        {
+            _inputListener.TouchStarted -= TouchStarted;
+            _inputListener.TouchEnded -= TouchEnded;
+        }
     }
 }

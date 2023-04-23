@@ -1,5 +1,10 @@
-public interface IService
+using TriviaQuest.Core.ServiceScope;
+
+namespace TriviaQuest.Core.Services
 {
-    Scope ScopeEnum { get; }
-    void Destroy();
+    public interface IService
+    {
+        Scope ScopeEnum { get; }
+        void Destroy();
+    }
 }

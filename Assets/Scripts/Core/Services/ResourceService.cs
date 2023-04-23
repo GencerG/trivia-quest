@@ -1,19 +1,23 @@
 using System.IO;
+using TriviaQuest.Core.ServiceScope;
 using UnityEngine;
 
-public class ResourceService : IService
+namespace TriviaQuest.Core.Services
 {
-    public Scope ScopeEnum => Scope.APPLICATION;
-
-    private const string PREFAB_PREFIX = "Prefabs";
-
-    public T GetPrefab<T>(string suffix) where T : Object
+    public class ResourceService : IService
     {
-        return Resources.Load<T>(Path.Combine(PREFAB_PREFIX, suffix));
-    }
+        public Scope ScopeEnum => Scope.APPLICATION;
 
-    public void Destroy()
-    {
-        Resources.UnloadUnusedAssets();
+        private const string PREFAB_PREFIX = "Prefabs";
+
+        public T GetPrefab<T>(string suffix) where T : Object
+        {
+            return Resources.Load<T>(Path.Combine(PREFAB_PREFIX, suffix));
+        }
+
+        public void Destroy()
+        {
+            Resources.UnloadUnusedAssets();
+        }
     }
 }

@@ -1,57 +1,62 @@
 using UnityEngine;
 using DG.Tweening;
 using System;
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
 
-public abstract class Popup : MonoBehaviour
+namespace TriviaQuest.UI
 {
-    public RectTransform Container;
-    protected Action _closeCallback;
-
-    public abstract string Name { get; }
-
-    public abstract void OnPopupCreated();
-
-    public virtual void Close()
+    public abstract class Popup : MonoBehaviour
     {
-        ScopeManager.Instance.GetService<PopupService>(Scope.APPLICATION).ClosePopup(this);
-    }
+        public RectTransform Container;
+        protected Action _closeCallback;
 
-    public virtual void Hide()
-    {
-        gameObject.SetActive(false);
-    }
+        public abstract string Name { get; }
 
-    public virtual void Appear()
-    {
-        gameObject.SetActive(true);
-    }
+        public abstract void OnPopupCreated();
 
-    public void SetCloseCallback(Action closeCallback)
-    {
-        _closeCallback = closeCallback;
-    }
+        public virtual void Close()
+        {
+            ScopeManager.Instance.GetService<PopupService>(Scope.APPLICATION).ClosePopup(this);
+        }
 
-    public virtual void PlayOutAnimation(Action onComplete)
-    {
-        onComplete?.Invoke();
-    }
+        public virtual void Hide()
+        {
+            gameObject.SetActive(false);
+        }
 
-    public virtual void OnPopupClosed()
-    {
-        _closeCallback?.Invoke();
-    }
+        public virtual void Appear()
+        {
+            gameObject.SetActive(true);
+        }
 
-    public virtual void PlayInAnimation()
-    {
-        var sequence = DOTween.Sequence();
+        public void SetCloseCallback(Action closeCallback)
+        {
+            _closeCallback = closeCallback;
+        }
 
-        var intialScale = Container.localScale.x;
-        sequence.Append(Container.DOScale(intialScale + 0.02f, 0.12f));
-        sequence.Append(Container.DOScale(intialScale, 0.1f));
-    }
+        public virtual void PlayOutAnimation(Action onComplete)
+        {
+            onComplete?.Invoke();
+        }
 
-    private void OnValidate()
-    {
-        transform.name = Name;
+        public virtual void OnPopupClosed()
+        {
+            _closeCallback?.Invoke();
+        }
+
+        public virtual void PlayInAnimation()
+        {
+            var sequence = DOTween.Sequence();
+
+            var intialScale = Container.localScale.x;
+            sequence.Append(Container.DOScale(intialScale + 0.02f, 0.12f));
+            sequence.Append(Container.DOScale(intialScale, 0.1f));
+        }
+
+        private void OnValidate()
+        {
+            transform.name = Name;
+        }
     }
 }

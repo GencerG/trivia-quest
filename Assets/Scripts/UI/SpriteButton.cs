@@ -1,21 +1,24 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SpriteButton : MonoBehaviour
+namespace TriviaQuest.UI
 {
-    public UnityEvent OnClick;
-
-    public void ButtonDown()
+    public class SpriteButton : MonoBehaviour
     {
-        transform.localScale = new Vector3(0.94f, 0.94f, 0.94f);
-    }
+        public UnityEvent OnClick;
 
-    public void ButtonUp(bool shouldTrigger)
-    {
-        transform.localScale = Vector3.one;
-        if (shouldTrigger)
+        public void ButtonDown()
         {
-            OnClick?.Invoke();
+            transform.localScale = new Vector3(0.94f, 0.94f, 0.94f);
+        }
+
+        public void ButtonUp(bool shouldTrigger)
+        {
+            transform.localScale = Vector3.one;
+            if (shouldTrigger)
+            {
+                OnClick?.Invoke();
+            }
         }
     }
 }
