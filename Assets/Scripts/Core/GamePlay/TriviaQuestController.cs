@@ -16,6 +16,9 @@ public class TriviaQuestController : MonoBehaviour
     private ScopeManager _scopManager;
     private Sequence _currentQuestionSequence;
 
+    private bool _sequencePaused;
+    private bool _levelEnd;
+
     public void Initialize(QuestionData questionData)
     {
         _scopManager = ScopeManager.Instance;
@@ -133,18 +136,24 @@ public class TriviaQuestController : MonoBehaviour
 
     public void EndLevel(Action onAnimationsComplete)
     {
+        _levelEnd = true;
         _countDownTimer.StopTimer();
         PlayLastQuestionAnimation(onAnimationsComplete);
     }
 
     public void OnCloseButtonClicked()
     {
+        if (_levelEnd)
+        {
+            return;
+        }
+
         _countDownTimer.PauseTimer();
         EnableInput(false);
-        var shouldPlaySequence = false;
+
         if (_currentQuestionSequence != null && _currentQuestionSequence.IsPlaying())
         {
-            shouldPlaySequence = true;
+            _sequencePaused = true;
             _currentQuestionSequence.Pause();
         }
 
@@ -152,9 +161,10 @@ public class TriviaQuestController : MonoBehaviour
         warningPopup.SetCloseCallback(() => 
         {
             _countDownTimer.UnPauseTimer();
-            if (shouldPlaySequence)
+            if (_sequencePaused)
             {
                 _currentQuestionSequence.Play();
+                _sequencePaused = false;
             }
             else
             {
@@ -165,6 +175,14 @@ public class TriviaQuestController : MonoBehaviour
 
     private void PlayLastQuestionAnimation(Action onComplete)
     {
+        if (_currentQuestionSequence != null && _sequencePaused)
+        {
+            _currentQuestionSequence.Play();
+            _sequencePaused = false;
+            _currentQuestionSequence.OnComplete(() => onComplete?.Invoke());
+            return;
+        }
+
         var currentTime = 0f;
         const float inOutAnimationDuration = 1.1f;
 
@@ -218,6 +236,11 @@ public class TriviaQuestController : MonoBehaviour
 
     private void PlayInAnimation()
     {
+        if (_levelEnd)
+        {
+            return;
+        }
+
         const float animationInterval = 0.1f;
 
         var sequence = DOTween.Sequence();
