@@ -16,6 +16,7 @@ namespace TriviaQuest.Core.Gameplay
         [SerializeField] private TriviaTimerDisplay _timerDisplay;
         [SerializeField] private TriviaScoreDisplay _scoreDisplay;
         [SerializeField] private TriviaCountDownTimer _countDownTimer;
+        [SerializeField] private SpriteRenderer _containerBackground;
 
         private QuestionData _currentQuestion;
         private Sequence _currentQuestionSequence;
@@ -24,6 +25,7 @@ namespace TriviaQuest.Core.Gameplay
         private TriviaService _triviaService;
         private PopupService _popupService;
         private InputService _inputService;
+        private GamePlayCameraService _cameraService;
 
         private bool _levelEnd;
 
@@ -35,6 +37,8 @@ namespace TriviaQuest.Core.Gameplay
             _popupService = scopeManager.GetService<PopupService>(Scope.APPLICATION);
             _triviaService = scopeManager.GetService<TriviaService>(Scope.GAMEPLAY);
             _inputService = scopeManager.GetService<InputService>(Scope.GAMEPLAY);
+            _inputService = scopeManager.GetService<InputService>(Scope.GAMEPLAY);
+            _cameraService = scopeManager.GetService<GamePlayCameraService>(Scope.GAMEPLAY);
 
             _currentQuestion = questionData;
 
@@ -44,6 +48,7 @@ namespace TriviaQuest.Core.Gameplay
             _countDownTimer.StartTimer();
             _scoreDisplay.Initialize();
 
+            SetBackgroundSizes();
             UpdateTexts(questionData);
             PlayInAnimation();
         }
@@ -219,6 +224,18 @@ namespace TriviaQuest.Core.Gameplay
             {
                 _choices[i].UpdateText(data.choices[i]);
             }
+        }
+
+        private void SetBackgroundSizes()
+        {
+            var size = _containerBackground.size;
+            size.x = _cameraService.Width + _containerBackground.sprite.bounds.size.x;
+            size.y = _cameraService.Height * 0.75f;
+            _containerBackground.size = size;
+
+            size = _questionBubble.BubbleSpriteRenderer.size;
+            size.x = _cameraService.Width + _questionBubble.BubbleSpriteRenderer.sprite.bounds.size.x;
+            _questionBubble.BubbleSpriteRenderer.size = size;
         }
 
         private void PlayOutAnimation()

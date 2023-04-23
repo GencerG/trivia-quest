@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentText: {fileID: 2702535815138728120}
+  BubbleSpriteRenderer: {fileID: 2702535814791678137}
 --- !u!1 &2702535814791678139
 GameObject:
   m_ObjectHideFlags: 0

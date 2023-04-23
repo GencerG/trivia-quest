@@ -18,6 +18,7 @@ namespace TriviaQuest.Core.Scenes
 
             yield return null;
 
+            scopeManager.GetService<GamePlayCameraService>(Scope.GAMEPLAY).Initialize();
             scopeManager.GetService<GameStrategyService>(Scope.GAMEPLAY).Initialize(GameMode.TRIVIA_QUEST);
             scopeManager.GetService<InputService>(Scope.GAMEPLAY).Initialize();
 

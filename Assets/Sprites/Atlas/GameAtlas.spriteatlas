@@ -53,6 +53,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 0bbbdc60348a3884cb9ca3a4283a13d6, type: 3}
   - {fileID: 21300000, guid: bfad5f3573c88be40a0b7b0e7b1bd79d, type: 3}
   - {fileID: 21300000, guid: 4b940e87b473a934e9f4409b8f50cc6d, type: 3}
+  - {fileID: 21300000, guid: 6b3db29726967654d87ae68485ba88b5, type: 3}
   - {fileID: 21300000, guid: 2d8f8458173368145a644f68155ebac6, type: 3}
   - {fileID: 21300000, guid: ad1020499dbac99408e5a9130406259e, type: 3}
   - {fileID: 21300000, guid: c505318a298c81749a574ceea3c3888a, type: 3}
@@ -62,6 +63,7 @@ SpriteAtlas:
   - QuestionChoiceBackground
   - CloseButton
   - QuestionBackground
+  - ContainerBackground
   - LeaderboardEntryBackground
   - ContinueButton
   - PopupBackground

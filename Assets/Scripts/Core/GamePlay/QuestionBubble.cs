@@ -5,6 +5,7 @@ namespace TriviaQuest.Core.Gameplay
 {
     public class QuestionBubble : QuestionComponent
     {
+        public SpriteRenderer BubbleSpriteRenderer;
         private Vector3 _intialScale;
 
         private void Awake()

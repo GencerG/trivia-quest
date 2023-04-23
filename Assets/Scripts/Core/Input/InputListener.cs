@@ -1,4 +1,6 @@
 using System;
+using TriviaQuest.Core.Services;
+using TriviaQuest.Core.ServiceScope;
 using UnityEngine;
 
 namespace TriviaQuest.Core.UserInput
@@ -14,7 +16,7 @@ namespace TriviaQuest.Core.UserInput
 
         private void Awake()
         {
-            _camera = Camera.main;
+            _camera = ScopeManager.Instance.GetService<GamePlayCameraService>(Scope.GAMEPLAY).GamePlayCamera;
 
 #if UNITY_EDITOR
 
