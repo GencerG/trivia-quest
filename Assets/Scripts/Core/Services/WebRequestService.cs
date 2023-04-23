@@ -10,7 +10,7 @@ namespace TriviaQuest.Core.Services
     public class WebRequestService : IService
     {
         private const string QUESTION_URL = "https://magegamessite.web.app/case1/questions.json";
-        private const string LEADERBOARD_URL = "https://magegamessite.web.app/case1/leaderboard_page_1.json";
+        private const string LEADERBOARD_URL = "localhost:8080/leaderboard?page=0";
 
         private const int REQUEST_TIMEOUT = 2;
 
