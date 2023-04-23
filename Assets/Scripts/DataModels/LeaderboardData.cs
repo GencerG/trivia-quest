@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
-public class LeaderboardData
-{
-    public List<LeaderboardPageData> LeaderboardPageDatas = new();
-}
 
 [Serializable]
 public class LeaderboardPageData
