@@ -8,7 +8,7 @@ public class QuestionChoice : QuestionComponent
     [SerializeField] private SpriteRenderer _backgroundSpriteRenderer;
 
     private const float MOVE_ANIMATION_DURATION = 0.4f;
-    private const float CHOICE_WIDTH = 1.5f;
+    private const float CHOICE_WIDTH = 4.72f;
 
     private float _outPosition;
     private float _inPosition;
