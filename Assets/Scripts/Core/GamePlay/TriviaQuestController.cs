@@ -13,15 +13,25 @@ public class TriviaQuestController : MonoBehaviour
     [SerializeField] private TriviaCountDownTimer _countDownTimer;
 
     private QuestionData _currentQuestion;
-    private ScopeManager _scopManager;
     private Sequence _currentQuestionSequence;
+
+    private ScoreService _scoreService;
+    private TriviaService _triviaService;
+    private PopupService _popupService;
+    private InputService _inputService;
 
     private bool _sequencePaused;
     private bool _levelEnd;
 
     public void Initialize(QuestionData questionData)
     {
-        _scopManager = ScopeManager.Instance;
+        var scopeManager = ScopeManager.Instance;
+
+        _scoreService = scopeManager.GetService<ScoreService>(Scope.GAMEPLAY);
+        _popupService = scopeManager.GetService<PopupService>(Scope.GAMEPLAY);
+        _triviaService = scopeManager.GetService<TriviaService>(Scope.GAMEPLAY);
+        _inputService = scopeManager.GetService<InputService>(Scope.GAMEPLAY);
+
         _currentQuestion = questionData;
 
         _countDownTimer.Initialize(this);
@@ -55,7 +65,7 @@ public class TriviaQuestController : MonoBehaviour
             HighlightCorrectAnswer(result);
         }
 
-        _scopManager.GetService<ScoreService>(Scope.GAMEPLAY).UpdateScore(state);
+        _scoreService.UpdateScore(state);
         StartNextQuestion();
     }
 
@@ -66,7 +76,7 @@ public class TriviaQuestController : MonoBehaviour
             yield break;
         }
 
-        _scopManager.GetService<ScoreService>(Scope.GAMEPLAY).UpdateScore(QuestionAnswer.TIME_OUT);
+        _scoreService.UpdateScore(QuestionAnswer.TIME_OUT);
         EnableInput(false);
         HighlightCorrectAnswer(result);
 
@@ -77,8 +87,7 @@ public class TriviaQuestController : MonoBehaviour
 
     public void EnableInput(bool enable)
     {
-        var inputService = _scopManager.GetService<InputService>(Scope.GAMEPLAY);
-        inputService.InputListener.Enable(enable);
+        _inputService.InputListener.Enable(enable);
     }
 
     private void HighlightCorrectAnswer(QuestionChoiceType result)
@@ -92,7 +101,7 @@ public class TriviaQuestController : MonoBehaviour
 
     private void StartNextQuestion()
     {
-        _currentQuestion = _scopManager.GetService<TriviaService>(Scope.GAMEPLAY).RequestNextQuestion();
+        _currentQuestion = _triviaService.RequestNextQuestion();
 
         if (_currentQuestion == null)
         {
@@ -157,7 +166,7 @@ public class TriviaQuestController : MonoBehaviour
             _currentQuestionSequence.Pause();
         }
 
-        var warningPopup = _scopManager.GetService<PopupService>(Scope.APPLICATION).ShowPopup<QuitWarningPopup>();
+        var warningPopup = _popupService.ShowPopup<QuitWarningPopup>();
         warningPopup.SetCloseCallback(() => 
         {
             _countDownTimer.UnPauseTimer();
