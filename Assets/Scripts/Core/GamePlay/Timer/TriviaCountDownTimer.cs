@@ -12,6 +12,7 @@ public class TriviaCountDownTimer : MonoBehaviour
 
     private int _secondsLeft;
     private int _duration;
+    private bool _paused;
 
     public void Initialize(TriviaQuestController controller)
     {
@@ -50,10 +51,24 @@ public class TriviaCountDownTimer : MonoBehaviour
         StartAll();
     }
 
+    public void PauseTimer()
+    {
+        _paused = true;
+    }
+
+    public void UnPauseTimer()
+    {
+        _paused = false;
+    }
+
     public void StopTimer()
     {
-        StopCoroutine(_countDownRoutine);
-        _countDownRoutine = null;
+        if (_countDownRoutine != null)
+        {
+            StopCoroutine(_countDownRoutine);
+            _countDownRoutine = null;
+        }
+
         ResetTimer();
     }
 
@@ -61,6 +76,11 @@ public class TriviaCountDownTimer : MonoBehaviour
     {
         while (true)
         {
+            while (_paused)
+            {
+                yield return null;
+            }
+
             yield return _oneSecond;
 
             _secondsLeft--;

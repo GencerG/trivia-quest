@@ -14,6 +14,7 @@ public class TriviaQuestController : MonoBehaviour
 
     private QuestionData _currentQuestion;
     private ScopeManager _scopManager;
+    private Sequence _currentQuestionSequence;
 
     public void Initialize(QuestionData questionData)
     {
@@ -105,33 +106,61 @@ public class TriviaQuestController : MonoBehaviour
 
         EnableInput(false);
 
-        var sequence = DOTween.Sequence();
+        _currentQuestionSequence = DOTween.Sequence();
 
         currentTime += startDelay;
-        sequence.InsertCallback(currentTime, PlayOutAnimation);
+        _currentQuestionSequence.InsertCallback(currentTime, PlayOutAnimation);
 
         currentTime += inOutAnimationDuration;
-        sequence.InsertCallback(currentTime, () => 
+        _currentQuestionSequence.InsertCallback(currentTime, () => 
         {
             UpdateTexts(_currentQuestion);
             _scoreDisplay.UpdateDisplay(null);
         });
 
         currentTime += inAnimationDelay + scoreAnimationDuration;
-        sequence.InsertCallback(currentTime, PlayInAnimation);
+        _currentQuestionSequence.InsertCallback(currentTime, PlayInAnimation);
 
         currentTime += inOutAnimationDuration;
-        sequence.InsertCallback(currentTime, () => 
+        _currentQuestionSequence.InsertCallback(currentTime, () => 
         {
             _countDownTimer.StartTimer();
             EnableInput(true);
         });
+
+        _currentQuestionSequence.OnComplete(() => _currentQuestionSequence = null);
     }
 
     public void EndLevel(Action onAnimationsComplete)
     {
         _countDownTimer.StopTimer();
         PlayLastQuestionAnimation(onAnimationsComplete);
+    }
+
+    public void OnCloseButtonClicked()
+    {
+        _countDownTimer.PauseTimer();
+        EnableInput(false);
+        var shouldPlaySequence = false;
+        if (_currentQuestionSequence != null && _currentQuestionSequence.IsPlaying())
+        {
+            shouldPlaySequence = true;
+            _currentQuestionSequence.Pause();
+        }
+
+        var warningPopup = _scopManager.GetService<PopupService>(Scope.APPLICATION).ShowPopup<QuitWarningPopup>();
+        warningPopup.SetCloseCallback(() => 
+        {
+            _countDownTimer.UnPauseTimer();
+            if (shouldPlaySequence)
+            {
+                _currentQuestionSequence.Play();
+            }
+            else
+            {
+                EnableInput(true);
+            }
+        });
     }
 
     private void PlayLastQuestionAnimation(Action onComplete)

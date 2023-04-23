@@ -10,4 +10,11 @@ public class QuitWarningPopup : Popup
     {
         
     }
+
+    public void OnContinueClicked()
+    {
+        _closeCallback = null;
+        ScopeManager.Instance.GetService<TriviaService>(Scope.GAMEPLAY).EndLevel();
+        Close();
+    }
 }
