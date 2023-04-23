@@ -10,9 +10,12 @@ public class SpriteButton : MonoBehaviour
         transform.localScale = new Vector3(0.94f, 0.94f, 0.94f);
     }
 
-    public void ButtonUp()
+    public void ButtonUp(bool shouldTrigger)
     {
         transform.localScale = Vector3.one;
-        OnClick?.Invoke();
+        if (shouldTrigger)
+        {
+            OnClick?.Invoke();
+        }
     }
 }

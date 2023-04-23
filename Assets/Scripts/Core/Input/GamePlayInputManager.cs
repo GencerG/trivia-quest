@@ -37,8 +37,21 @@ public class GamePlayInputManager
     {
         if (_clickedSpriteButton == null) return;
 
-        _clickedSpriteButton.ButtonUp();
-        _clickedSpriteButton = null;
+        var hitCollider = Physics2D.OverlapPoint(touchPosition);
+
+        if (hitCollider != null && hitCollider.TryGetComponent<SpriteButton>(out var spireButton))
+        {
+            if (_clickedSpriteButton.Equals(spireButton))
+            {
+                _clickedSpriteButton.ButtonUp(true);
+                _clickedSpriteButton = null;
+            }
+        }
+        else
+        {
+            _clickedSpriteButton.ButtonUp(false);
+            _clickedSpriteButton = null;
+        }
     }
 
     public void Destroy()
