@@ -1,0 +1,3 @@
+[submodule "trivia-quest-rest-api"]
+	path = trivia-quest-rest-api
+	url = https://github.com/GencerG/trivia-quest-rest-api.git
