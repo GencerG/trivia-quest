@@ -30,11 +30,6 @@ namespace TriviaQuest.Core.Services
             return _currentStrategy.GetWrongAnswerScore();
         }
 
-        public bool ShouldUseTimer()
-        {
-            return _currentStrategy.ShouldUseTimer();
-        }
-
         public int GetStageDuration()
         {
             return _currentStrategy.GetStageDuration();
@@ -49,12 +44,6 @@ namespace TriviaQuest.Core.Services
         {
             return _currentStrategy.ShouldSelectQuestionRandomly();
         }
-
-        public int GetQuestionLimit()
-        {
-            return _currentStrategy.GetQuestionLimit();
-        }
-
 
         public void Destroy()
         {
