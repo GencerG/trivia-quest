@@ -29,7 +29,7 @@ namespace TriviaQuest.Core.Services
 
             if (_questionDataList == null || _questionDataList.Count == 0)
             {
-                scopeManager.GetService<SceneService>(Scope.APPLICATION).ChangeScene(TriviaQuestScene.MAIN_MENU);
+                scopeManager.GetService<SceneService>(Scope.APPLICATION).ChangeScene(TriviaQuestScene.MAIN_MENU, true);
                 yield break;
             }
 

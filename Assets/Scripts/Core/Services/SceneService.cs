@@ -21,14 +21,20 @@ namespace TriviaQuest.Core.Services
             ChangeScene(TriviaQuestScene.MAIN_MENU);
         }
 
-        public void ChangeScene(TriviaQuestScene scene)
+        public void ChangeScene(TriviaQuestScene scene, bool force = false)
         {
-            if (_currentSceneChangeRoutine != null)
+            if (_currentSceneChangeRoutine != null && force)
             {
                 Debug.LogWarning("Trying to change scene while there is active transition, killing current transition");
 
                 StopCoroutine(_currentSceneChangeRoutine);
                 _currentSceneChangeRoutine = null;
+            }
+
+            if (_currentSceneChangeRoutine != null)
+            {
+                Debug.LogWarning("Scene transition in progress can not change scene, try force paramater");
+                return;
             }
 
             _currentSceneChangeRoutine = StartCoroutine(SceneChangeRoutine(scene));
