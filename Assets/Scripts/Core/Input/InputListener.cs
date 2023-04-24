@@ -24,7 +24,7 @@ namespace TriviaQuest.Core.UserInput
 #else
         
 
-            _inputService = new TouchInput();
+            _userInput = new TouchInput();
 #endif
 
         }
