@@ -63,7 +63,7 @@ namespace TriviaQuest.Core.Services
 
         private QuestionData GetQuestionData()
         {
-            if (_questionDataList == null || _questionDataList.Count == 0)
+            if (_questionDataList == null)
             {
                 return null;
             }

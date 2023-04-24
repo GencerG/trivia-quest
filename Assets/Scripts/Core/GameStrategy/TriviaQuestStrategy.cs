@@ -12,11 +12,6 @@ namespace TriviaQuest.Core.GameStrategy
             return -5;
         }
 
-        public bool ShouldUseTimer()
-        {
-            return true;
-        }
-
         public int GetStageDuration()
         {
             return 20;
@@ -25,11 +20,6 @@ namespace TriviaQuest.Core.GameStrategy
         public int GetTimeoutScore()
         {
             return -3;
-        }
-
-        public int GetQuestionLimit()
-        {
-            return 10;
         }
 
         public bool ShouldSelectQuestionRandomly()

@@ -6,14 +6,10 @@ namespace TriviaQuest.Core.GameStrategy
 
         int GetWrongAnswerScore();
 
-        bool ShouldUseTimer();
-
         int GetStageDuration();
 
         int GetTimeoutScore();
 
         bool ShouldSelectQuestionRandomly();
-
-        int GetQuestionLimit();
     }
 }
