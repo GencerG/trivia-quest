@@ -37,7 +37,6 @@ namespace TriviaQuest.Core.Gameplay
             _popupService = scopeManager.GetService<PopupService>(Scope.APPLICATION);
             _triviaService = scopeManager.GetService<TriviaService>(Scope.GAMEPLAY);
             _inputService = scopeManager.GetService<InputService>(Scope.GAMEPLAY);
-            _inputService = scopeManager.GetService<InputService>(Scope.GAMEPLAY);
             _cameraService = scopeManager.GetService<GamePlayCameraService>(Scope.GAMEPLAY);
 
             _currentQuestion = questionData;
