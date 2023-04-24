@@ -82,7 +82,7 @@ namespace TriviaQuest.Core.Services
             }
             else
             {
-                if (_currentQuestionIndex >= _questionDataList.Count - 1)
+                if (_currentQuestionIndex > _questionDataList.Count - 1)
                 {
                     EndLevel();
                     return null;

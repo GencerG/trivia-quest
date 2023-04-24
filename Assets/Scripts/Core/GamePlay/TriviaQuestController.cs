@@ -113,7 +113,6 @@ namespace TriviaQuest.Core.Gameplay
 
             if (_currentQuestion == null)
             {
-                _triviaService.EndLevel(false);
                 return;
             }
 
