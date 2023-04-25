@@ -12,5 +12,7 @@ public static class Bootstrapper
         Object.DontDestroyOnLoad(applicationScope.ScopeObject);
         var sceneService = applicationScope.ScopeObject.AddComponent<SceneService>();
         applicationScope.RegisterService(sceneService);
+
+        Application.targetFrameRate = 60;
     }
 }
