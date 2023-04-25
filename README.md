@@ -11,4 +11,4 @@
 
 #### Running
 - After cloning the repository run the command `git submodule update --init --recursive` to pull submodules.
-- Open the projecet in Unity and hit the play button.
+- Open the projecet in Unity, go to InitialScene and hit the play button.
