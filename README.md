@@ -12,3 +12,5 @@
 #### Running
 - After cloning the repository run the command `git submodule update --init --recursive` to pull submodules.
 - Open the projecet in Unity, go to InitialScene and hit the play button.
+- To receive leaderboard, you need to go submodule and run it.
+- The questions are requested from the internet. You need an internet connection to play it.
